@@ -1,6 +1,7 @@
 
-function Agent(defnName, posInCells)
+function Agent(name, defnName, posInCells)
 {
+	this.name = name;
 	this.defnName = defnName;
 	this.posInCells = posInCells;
 
@@ -8,6 +9,8 @@ function Agent(defnName, posInCells)
 	this.resourceHolder = new ResourceHolder();
 	this.facilityHome = null;
 	this.facilityWork = null;
+
+	this._displacementToGoal = new Coords();
 }
 
 {
@@ -19,12 +22,15 @@ function Agent(defnName, posInCells)
 		var isAtGoal = false;
 
 		var goalPosInCells = entityGoal.posInCells;
-		var displacementToGoal = goalPosInCells.clone().subtract
+		var displacementToGoal = this._displacementToGoal.overwriteWith
+		(
+			goalPosInCells
+		).subtract
 		(
 			this.posInCells
 		);
 		var distanceToGoal = displacementToGoal.magnitude();
-		var moveSpeedPerTick = .1;
+		var moveSpeedPerTick = .2;
 
 		if (distanceToGoal < moveSpeedPerTick)
 		{
@@ -34,18 +40,6 @@ function Agent(defnName, posInCells)
 		}
 		else
 		{
-			/*
-			var directionToGoal = displacementToGoal.clone().divideScalar
-			(
-				distanceToGoal
-			);
-
-			var moveTowardGoal = directionToGoal.clone().multiplyScalar
-			(
-				moveSpeedPerTick
-			);
-			*/
-
 			var path = new Path
 			(
 				level.map, 
@@ -124,14 +118,9 @@ function Agent(defnName, posInCells)
 			);
 		}
 
-		var secondsSinceSunrise = 
-			level.secondsSinceStarted() 
-			% world.diurnalPeriodInSeconds;
+		var fractionOfDayNightCycleCompleted = level.fractionOfDayNightCycleCompleted(world);
 		
-		var fractionOfDiurnCompleted = 
-			secondsSinceSunrise / world.diurnalPeriodInSeconds;
-		
-		if (fractionOfDiurnCompleted < .4)
+		if (fractionOfDayNightCycleCompleted < .4)
 		{
 			// work
 		
@@ -140,14 +129,14 @@ function Agent(defnName, posInCells)
 				this.facilityWork.agentDirect(world, level, this);
 			}
 		}
-		else if (fractionOfDiurnCompleted < .6)
+		else if (fractionOfDayNightCycleCompleted < .6)
 		{
 			// shop
 
 			if (this.facilityHome != null)
 			{
 				var facilityMarketplace = level.facilities["Marketplace"][0];
-				this.facilityHome.agentDirect(world, level, this);
+				facilityMarketplace.agentDirect(world, level, this);
 			}
 		}
 		else
@@ -213,7 +202,8 @@ function Agent(defnName, posInCells)
 		var newline = "\n";
 
 		var returnValue = 
-			this.defnName + newline
+			this.name + newline
+			+ this.defnName + newline
 			+ this.resourceHolder.toString();
 		
 		return returnValue;

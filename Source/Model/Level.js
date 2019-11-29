@@ -25,7 +25,7 @@ function Level(name, map, owner, facilities, agents)
 }
 
 {
-	Level.prototype.entityAtPos = function(world, posToCheck)
+	Level.prototype.entitiesAtPos = function(world, posToCheck, listToAddTo)
 	{
 		var returnValue = null;
 
@@ -55,12 +55,22 @@ function Level(name, map, owner, facilities, agents)
 
 				if (entityPosInCells.equals(posToCheckInCells) == true)
 				{
-					returnValue = entity;
-					s = entitySets.length;
-					break;
+					listToAddTo.push(entity);
 				}
 			}
 		}
+
+		return listToAddTo;
+	}
+
+	Level.prototype.fractionOfDayNightCycleCompleted = function(world)
+	{
+		var secondsSinceSunrise = 
+			this.secondsSinceStarted() 
+			% world.dayNightCyclePeriodInSeconds;
+		
+		var returnValue = 
+			secondsSinceSunrise / world.dayNightCyclePeriodInSeconds;
 
 		return returnValue;
 	}
@@ -96,7 +106,17 @@ function Level(name, map, owner, facilities, agents)
 			new Coords
 			(
 				this.map.sizeInPixels.x / 3, 
-				this.map.sizeInPixels.y
+				this.map.sizeInPixels.y / 2
+			)
+		);
+
+		this.paneSelection = new Pane
+		(
+			new Coords(this.map.sizeInPixels.x, this.map.sizeInPixels.y / 2),
+			new Coords
+			(
+				this.map.sizeInPixels.x / 3, 
+				this.map.sizeInPixels.y / 2
 			)
 		);
 
@@ -110,6 +130,30 @@ function Level(name, map, owner, facilities, agents)
 			/ Globals.Instance.timerTicksPerSecond;
 
 		return secondsSinceStarted;
+	}
+
+	Level.prototype.timeOfDay = function(world)
+	{
+		var timeAsFraction = this.fractionOfDayNightCycleCompleted(world);
+		var hoursPerDay = 24;
+		var hoursFullSinceSunrise = Math.floor(timeAsFraction * hoursPerDay);
+
+		var timeHours = hoursFullSinceSunrise += 6;
+		if (timeHours >= hoursPerDay)
+		{
+			timeHours -= hoursPerDay;
+		}
+
+		var minutesPerHour = 60;
+		var minutesPerDay = minutesPerHour * hoursPerDay;
+		var minutesFullSinceSunrise = Math.floor(timeAsFraction * minutesPerDay);
+		var minutesSinceStartOfHour = minutesFullSinceSunrise % minutesPerHour;
+
+		var timeMinutes = ("" + minutesSinceStartOfHour).padLeft("0", 2);
+
+		var returnValue = timeHours + ":" + timeMinutes;
+
+		return returnValue;
 	}
 
 	Level.prototype.updateForTimerTick = function(world)

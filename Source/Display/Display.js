@@ -117,6 +117,8 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 
 	Display.prototype.drawText = function(textToDraw, color, pos)
 	{
+		this.graphics.fillStyle = color;
+
 		var textLines = textToDraw.split("\n");
 		for (var i = 0; i < textLines.length; i++)
 		{

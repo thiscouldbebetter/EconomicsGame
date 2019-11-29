@@ -87,7 +87,7 @@ function Map
 
 	// drawable
 
-	Map.prototype.drawToDisplay = function(display)
+	Map.prototype.drawToDisplay = function(display, world, level)
 	{
 		var cellPos = this.cellPos;
 		var drawPos = this.drawPos;
@@ -104,6 +104,18 @@ function Map
 				
 				cell.drawToDisplay(display, this);
 			}
+		}
+
+		var fractionOfDayNightCycleCompleted = level.fractionOfDayNightCycleCompleted(world);
+		if (fractionOfDayNightCycleCompleted > .5)
+		{
+			display.drawRectangle
+			(
+				new Coords(0, 0), //pos,
+				display.size,
+				"rgba(0, 0, 0, .5)", // colorFill,
+				null // colorBorder
+			);
 		}
 	}
 }

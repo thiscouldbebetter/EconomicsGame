@@ -11,15 +11,7 @@ function Cursor(posInCells)
 {
 	Cursor.prototype.activate = function(world, level)
 	{
-		if (this.entitySelected == null)
-		{
-			var entityAtCursor = level.entityAtPos
-			(
-				world, this.pos
-			);
-			this.entitySelected = entityAtCursor;
-		}
-		else if (this.entityToPlace != null)
+		if (this.entityToPlace != null)
 		{
 			var facility = this.entityToPlace;
 			var facilityDefn = facility.defn(world);
@@ -36,6 +28,23 @@ function Cursor(posInCells)
 				level.facilities.push(facility);
 
 				this.entityToPlace = null;
+			}
+		}
+		else
+		{
+			var entitiesAtPos = level.entitiesAtPos
+			(
+				world, this.pos, []
+			);
+
+			for (var i = 0; i < entitiesAtPos.length; i++)
+			{
+				var entityAtPos = entitiesAtPos[i];
+				if (entityAtPos != this.entitySelected)
+				{
+					this.entitySelected = entityAtPos;
+					break;
+				}
 			}
 		}
 	}
@@ -55,7 +64,7 @@ function Cursor(posInCells)
 			var facility = new Facility
 			(
 				facilityDefn.name, 
-				this.posInCells
+				this.posInCells.clone()
 			);
 			this.entityToPlace = facility;
 		}
@@ -137,21 +146,21 @@ function Cursor(posInCells)
 	{
 		this.visual.drawToDisplayForDrawable(display, this);
 
+		var textColor = "Gray";
+		var timeAsString = level.timeOfDay(world);
+		var visual = new VisualText("Time: " + timeAsString, textColor);
+		var drawableDummy = display.drawableDummy;
+		drawableDummy.pos.clear();
+		visual.drawToDisplayForDrawable
+		(
+			level.paneStatus, drawableDummy
+		);
+
+		var selectionAsText = "[none]";
+
 		if (this.entitySelected != null)
 		{
-			var entitySelectedAsText = this.entitySelected.toString();
-			var visual = new VisualText
-			(
-				entitySelectedAsText, 
-				"LightGray"
-			);
-			var drawableDummy = display.drawableDummy;
-			drawableDummy.pos.clear();
-			visual.drawToDisplayForDrawable
-			(
-				level.paneStatus,
-				drawableDummy
-			);
+			selectionAsText = this.entitySelected.toString();
 
 			if (this.entityToPlace != null)
 			{
@@ -165,5 +174,12 @@ function Cursor(posInCells)
 				);
 			}
 		}
+
+		drawableDummy.pos.clear();
+		visual = new VisualText("Selected:\n" + selectionAsText, textColor);
+		visual.drawToDisplayForDrawable
+		(
+			level.paneSelection, drawableDummy
+		);
 	}	
 }

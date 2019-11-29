@@ -3,7 +3,7 @@
 function World
 (
 	name, 
-	diurnalPeriodInSeconds, 
+	dayNightCyclePeriodInSeconds, 
 	resourceDefns,
 	mapEmplacementDefns, 
 	facilityDefns, 
@@ -13,7 +13,7 @@ function World
 )
 {
 	this.name = name;
-	this.diurnalPeriodInSeconds = diurnalPeriodInSeconds;
+	this.dayNightCyclePeriodInSeconds = dayNightCyclePeriodInSeconds;
 	this.resourceDefns = resourceDefns.addLookups("name");
 	this.mapEmplacementDefns = mapEmplacementDefns.addLookups("name");
 	this.facilityDefns = facilityDefns.addLookups("name");
