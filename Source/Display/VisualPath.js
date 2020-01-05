@@ -1,20 +1,21 @@
 
-function VisualPath(vertices, isClosed, colorFill, colorBorder)
+function VisualPath(verticesAsPath, color, lineThickness, isClosed)
 {
-	this.vertices = vertices;
+	this.verticesAsPath = verticesAsPath;
+	this.color = color;
 	this.isClosed = isClosed;
-	this.colorFill = colorFill;
-	this.colorBorder = colorBorder;
 
-	this.size = new Bounds
+	this.size = new Box
 	(
 		new Coords(), new Coords()
-	).fromPoints
+	).ofPoints
 	(
-		this.vertices
+		this.verticesAsPath.points
 	).size;
 
 	this.sizeHalf = this.size.clone().divideScalar(2);
+
+	this.verticesAsPathTransformed = this.verticesAsPath.clone();
 }
 
 {
@@ -24,10 +25,7 @@ function VisualPath(vertices, isClosed, colorFill, colorBorder)
 
 	// methods
 
-	VisualPath.prototype.drawToDisplayForDrawable = function
-	(
-		display, drawable
-	)
+	VisualPath.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var drawPos = VisualPath.drawPos;
 		drawPos.overwriteWith
@@ -37,11 +35,17 @@ function VisualPath(vertices, isClosed, colorFill, colorBorder)
 		(
 			this.sizeHalf
 		);
-		
+
+		this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);
+		var vertices = this.verticesAsPathTransformed.points;
+		for (var i = 0; i < vertices.length; i++)
+		{
+			vertices[i].add(drawPos);
+		}
+
 		display.drawPath
 		(
-			drawPos, this.vertices, this.isClosed,
-			this.colorFill, this.colorBorder
+			vertices, this.color, this.lineThickness, this.isClosed
 		);
 	}
 }

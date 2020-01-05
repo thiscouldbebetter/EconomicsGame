@@ -14,12 +14,12 @@ function DemoData()
 			mapSizeInCells
 		);
 
-		var mapTerrains = 
+		var mapTerrains =
 		[
 			new MapTerrain
 			(
-				"Floor", 
-				".", 
+				"Floor",
+				".",
 				1, // costToTraverse
 				new VisualRectangle
 				(
@@ -30,8 +30,8 @@ function DemoData()
 			),
 			new MapTerrain
 			(
-				"Wall", 
-				"x", 
+				"Wall",
+				"x",
 				1000000, // costToTraverse
 				new VisualRectangle
 				(
@@ -41,39 +41,39 @@ function DemoData()
 				)
 
 			),
-		].addLookups("code");
+		].addLookups(x => x.code);
 
-		var mapEmplacementDefns = 
+		var visualPathColor = "Tan";
+		var visualPath = new VisualGroup
+		([
+			new VisualPath
+			(
+				new Path
+				([
+					new Coords(0, -.5).multiply(mapCellSizeInPixels),
+					new Coords(0, .5).multiply(mapCellSizeInPixels),
+				]),
+				visualPathColor
+			),
+			new VisualPath
+			(
+				new Path
+				([
+					new Coords(-.5, 0).multiply(mapCellSizeInPixels),
+					new Coords(.5, 0).multiply(mapCellSizeInPixels),
+				]),
+				visualPathColor
+			),
+		]);
+
+		var mapEmplacementDefns =
 		[
 			new MapEmplacementDefn
 			(
 				"Path",
 				"x",
 				.2, // costToTraverseMultiplier
-				new VisualGroup
-				([
-					new VisualPath
-					(
-						[
-							new Coords(0, 0).multiply(mapCellSizeInPixels),
-							new Coords(0, 1).multiply(mapCellSizeInPixels),
-						],
-						false, // isClosed
-						null, // colorFill
-						"Tan"
-					),
-					new VisualPath
-					(
-						[
-							new Coords(0, 0).multiply(mapCellSizeInPixels),
-							new Coords(1, 0).multiply(mapCellSizeInPixels),
-						],
-						false, // isClosed
-						null, // colorFill
-						"Tan"
-					),
-
-				])				
+				visualPath
 			),
 		];
 
@@ -123,10 +123,10 @@ function DemoData()
 			]
 
 		);
-		
+
 		map.terrains = mapTerrains;
 
-		var resourceDefns = 
+		var resourceDefns =
 		[
 			new ResourceDefn
 			(
@@ -161,14 +161,14 @@ function DemoData()
 				)
 			),
 
-		].addLookups("name");
+		].addLookupsByName();
 
 		var facilitySize = mapCellSizeInPixels.clone().multiplyScalar(.6);
 
 		var facilityDefns = this.world_FacilityDefns(facilitySize)
 
 		var agentColor = "LightGreen";
-		var agentDefns = 
+		var agentDefns =
 		[
 			new AgentDefn
 			(
@@ -184,7 +184,7 @@ function DemoData()
 					new Resource(resourceDefns["ResourceDefn1"].name, .2),
 				]
 			)
-		].addLookups("name");
+		].addLookupsByName();
 
 		var actions = Action.Instances._All;
 
@@ -212,7 +212,7 @@ function DemoData()
 			mapEmplacementDefns,
 			facilityDefns,
 			agentDefns,
-			actions, 
+			actions,
 			level
 		);
 
@@ -229,21 +229,22 @@ function DemoData()
 			([
 				new VisualPath
 				(
-					[
+					new Path
+					([
+						new Coords(0, -.5).multiply(facilitySize),
 						new Coords(.5, 0).multiply(facilitySize),
-						new Coords(1, .5).multiply(facilitySize),
-						new Coords(1, 1).multiply(facilitySize),
-						new Coords(0, 1).multiply(facilitySize),
-						new Coords(0, .5).multiply(facilitySize),
-
-					], 
+						new Coords(.5, .5).multiply(facilitySize),
+						new Coords(-.5, .5).multiply(facilitySize),
+						new Coords(-.5, 0).multiply(facilitySize)
+					]),
+					houseColor,
+					1, // lineThickness
 					true, // isClosed
-					null, houseColor // colors
 				),
 				new VisualText("House", houseColor)
 			]),
 			// resourcesToBuild
-			[], 
+			[],
 			// initialize
 			function(world, level, facility)
 			{
@@ -279,23 +280,25 @@ function DemoData()
 			([
 				new VisualPath
 				(
-					[
+					new Path
+					([
+						new Coords(0, -.5).multiply(facilitySize),
+						new Coords(.25, -.45).multiply(facilitySize),
 						new Coords(.5, 0).multiply(facilitySize),
-						new Coords(.75, .05).multiply(facilitySize),
-						new Coords(1, .5).multiply(facilitySize),
-						new Coords(1, 1).multiply(facilitySize),
-						new Coords(0, 1).multiply(facilitySize),
-						new Coords(0, .5).multiply(facilitySize),
-						new Coords(.25, .05).multiply(facilitySize),
-					],
-					true, // isClosed 
-					null, farmColor // colors
+						new Coords(.5, .5).multiply(facilitySize),
+						new Coords(-.5, .5).multiply(facilitySize),
+						new Coords(-.5, 0).multiply(facilitySize),
+						new Coords(-.25, -.45).multiply(facilitySize),
+					]),
+					farmColor,
+					1, // lineThickness
+					true // isClosed
 				),
 				new VisualText("Farm", farmColor)
 			]),
 			// resourcesToBuild
 			[],
-			null, // initialize 
+			null, // initialize
 			// agentDirect
 			function(world, level, agent, facility)
 			{
@@ -328,7 +331,7 @@ function DemoData()
 				new VisualText("Marketplace", marketplaceColor)
 			]),
 			// resourcesToBuild
-			[], 
+			[],
 			null, // initialize
 			// agentDirect
 			function(world, level, agent, facility)
@@ -349,12 +352,12 @@ function DemoData()
 			}
 		);
 
-		var facilityDefns = 
+		var facilityDefns =
 		[
 			house,
 			farm,
 			marketplace,
-		].addLookups("name");
+		].addLookupsByName();
 
 		return facilityDefns;
 	}

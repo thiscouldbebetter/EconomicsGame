@@ -87,7 +87,7 @@ function Action(name, perform)
 		);
 
 
-		this._All = 
+		this._All =
 		[
 			this.Activate,
 			this.Cancel,

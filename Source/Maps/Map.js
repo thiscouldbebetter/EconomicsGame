@@ -1,16 +1,16 @@
 
 function Map
 (
-	sizeInPixels, 
-	terrains, 
-	emplacementDefns, 
-	cellTerrainsAsStrings, 
+	sizeInPixels,
+	terrains,
+	emplacementDefns,
+	cellTerrainsAsStrings,
 	cellEmplacementsAsStrings
 )
 {
 	this.sizeInPixels = sizeInPixels;
-	this.terrains = terrains.addLookups("code");
-	this.emplacementDefns = emplacementDefns.addLookups("code");
+	this.terrains = terrains.addLookups(x => x.code);
+	this.emplacementDefns = emplacementDefns.addLookups(x => x.code);
 
 	this.sizeInCells = new Coords
 	(
@@ -18,12 +18,12 @@ function Map
 		cellTerrainsAsStrings.length
 	);
 
-	this.boundsInCellsMinusOnes = new Bounds
+	this.boundsInCellsMinusOnes = Box.fromMinAndMax
 	(
-		Coords.Instances.Zeroes,
+		Coords.Instances().Zeroes,
 		this.sizeInCells.clone().subtract
 		(
-			Coords.Instances.Ones
+			Coords.Instances().OneOneZero
 		)
 	);
 
@@ -46,8 +46,8 @@ function Map
 
 			var cell = new MapCell
 			(
-				cellTerrainCode, 
-				emplacementCode, 
+				cellTerrainCode,
+				emplacementCode,
 				cellPos.clone()
 			);
 
@@ -55,7 +55,7 @@ function Map
 		}
 	}
 
-	this.neighborOffsets = 
+	this.neighborOffsets =
 	[
 		new Coords(1, 0),
 		new Coords(0, 1),
@@ -72,6 +72,7 @@ function Map
 
 	this.cellPos = new Coords();
 	this.drawPos = new Coords();
+	this._locatable = new Locatable(new Location(this.drawPos));
 }
 
 {
@@ -87,7 +88,7 @@ function Map
 
 	// drawable
 
-	Map.prototype.drawToDisplay = function(display, world, level)
+	Map.prototype.draw = function(universe, world, display, level)
 	{
 		var cellPos = this.cellPos;
 		var drawPos = this.drawPos;
@@ -101,8 +102,8 @@ function Map
 				cellPos.x = x;
 
 				var cell = this.cellAtPosInCells(cellPos);
-				
-				cell.drawToDisplay(display, this);
+
+				cell.draw(universe, world, display, this);
 			}
 		}
 

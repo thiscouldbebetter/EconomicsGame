@@ -15,7 +15,7 @@ function Pane(pos, size)
 	{
 		this.drawRectangle
 		(
-			Coords.Instances.Zeroes, this.sizeInPixels,
+			Coords.Instances().Zeroes, this.sizeInPixels,
 			this.colorBack, this.colorFore
 		);
 	}
@@ -35,19 +35,10 @@ function Pane(pos, size)
 		);
 	}
 
-	Pane.prototype.drawPath = function
-	(
-		pos, vertices, isClosed, colorFill, colorBorder
-	)
+	Pane.prototype.drawPath = function(vertices, color, lineThickness, isClosed)
 	{
 		var display = Globals.Instance.display;
-		display.drawPath
-		(
-			pos.clone().add(this.pos),
-			vertices,
-			isClosed,
-			colorFill, colorBorder
-		);
+		display.drawPath(vertices, color, lineThickness, isClosed);
 	}
 
 	Pane.prototype.drawRectangle = function
@@ -65,11 +56,11 @@ function Pane(pos, size)
 		);
 	}
 
-	Pane.prototype.drawText = function(textToDraw, color, pos)
+	Pane.prototype.drawText = function(textToDraw, fontHeightInPixels, pos, color)
 	{
 		var drawPos = this.drawPos;
 		drawPos.overwriteWith(this.pos).add(pos);
 		var display = Globals.Instance.display;
-		display.drawText(textToDraw, color, drawPos);
+		display.drawText(textToDraw, fontHeightInPixels, drawPos, color);
 	}
 }

@@ -13,9 +13,9 @@ function ResourceHolder()
 		{
 			var resourceToCheck = resourcesToCheck[i];
 			var resourceHeld = this.resources[resourceToCheck.defnName];
-			if 
+			if
 			(
-				resourceHeld == null 
+				resourceHeld == null
 				|| resourceHeld.amount < resourceToCheck.amount
 			)
 			{
@@ -44,7 +44,7 @@ function ResourceHolder()
 			this.resources.remove(resourceExisting);
 			delete this.resources[resourceDefnName];
 		}
-		
+
 	}
 
 	ResourceHolder.prototype.resourceTransferToOther = function
@@ -74,7 +74,7 @@ function ResourceHolder()
 	ResourceHolder.prototype.toString = function()
 	{
 		var returnValue = this.resources.toString().split(",").join("\n");
-		
+
 		return returnValue;
 	}
 

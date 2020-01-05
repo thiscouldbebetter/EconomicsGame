@@ -6,6 +6,9 @@ function Agent(name, defnName, posInCells)
 	this.posInCells = posInCells;
 
 	this.pos = new Coords();
+	var loc = new Location(this.pos);
+	this.Locatable = new Locatable(loc);
+
 	this.resourceHolder = new ResourceHolder();
 	this.facilityHome = null;
 	this.facilityWork = null;
@@ -35,20 +38,20 @@ function Agent(name, defnName, posInCells)
 		if (distanceToGoal < moveSpeedPerTick)
 		{
 			this.posInCells.overwriteWith(goalPosInCells);
-			
+
 			isAtGoal = true;
 		}
 		else
 		{
-			var path = new Path
+			var path = new PathAgent
 			(
-				level.map, 
+				level.map,
 				this.posInCells.clone().floor(), // startPos
 				goalPosInCells
-			); 
+			);
 
 			path.calculate();
-		
+
 			var directionToGoal;
 
 			if (path.nodes.length < 2)
@@ -77,12 +80,12 @@ function Agent(name, defnName, posInCells)
 		}
 
 		return isAtGoal;
-	}
+	};
 
 	Agent.prototype.defn = function(world)
 	{
 		return world.agentDefns[this.defnName];
-	}
+	};
 
 	Agent.prototype.initialize = function(world, level)
 	{
@@ -91,12 +94,12 @@ function Agent(name, defnName, posInCells)
 			this.posInCells
 		).add
 		(
-			Coords.Instances.Halves
+			Coords.Instances().Halves
 		).multiply
 		(
 			level.map.cellSizeInPixels
 		);
-	}
+	};
 
 	Agent.prototype.updateForTimerTick = function(world, level)
 	{
@@ -104,26 +107,24 @@ function Agent(name, defnName, posInCells)
 		{
 			this.facilityHome = this.updateForTimerTick_FacilityChoose
 			(
-				level, 
-				true // findHome
+				level, true // findHome
 			);
 		}
-	
+
 		if (this.facilityWork == null)
 		{
 			this.facilityWork = this.updateForTimerTick_FacilityChoose
 			(
-				level,
-				false // findHome
+				level, false // findHome
 			);
 		}
 
 		var fractionOfDayNightCycleCompleted = level.fractionOfDayNightCycleCompleted(world);
-		
+
 		if (fractionOfDayNightCycleCompleted < .4)
 		{
 			// work
-		
+
 			if (this.facilityWork != null)
 			{
 				this.facilityWork.agentDirect(world, level, this);
@@ -154,12 +155,12 @@ function Agent(name, defnName, posInCells)
 			this.posInCells
 		).add
 		(
-			Coords.Instances.Halves
+			Coords.Instances().Halves
 		).multiply
 		(
 			level.map.cellSizeInPixels
-		);			
-	}
+		);
+	};
 
 	Agent.prototype.updateForTimerTick_FacilityChoose = function(level, findHome)
 	{
@@ -170,7 +171,7 @@ function Agent(name, defnName, posInCells)
 		{
 			var facility = facilities[i];
 			var facilityIsHouse = (facility.defnName == "House");
-			if 
+			if
 			(
 				facility.agentAssigned == null
 				&& findHome == facilityIsHouse
@@ -183,17 +184,17 @@ function Agent(name, defnName, posInCells)
 		}
 
 		return returnValue;
-	}
+	};
 
 	// drawable
 
-	Agent.prototype.drawToDisplay = function(display, world, level)
+	Agent.prototype.draw = function(universe, world, display, level)
 	{
-		this.defn(world).visual.drawToDisplayForDrawable
-		(
-			display, this
-		);
-	}
+		var visual = this.defn(world).visual;
+		var drawable = display.drawableDummy;
+		drawable.pos.overwriteWith(this.pos);
+		visual.draw(universe, world, display, drawable, this);
+	};
 
 	// strings
 
@@ -201,11 +202,11 @@ function Agent(name, defnName, posInCells)
 	{
 		var newline = "\n";
 
-		var returnValue = 
+		var returnValue =
 			this.name + newline
 			+ this.defnName + newline
 			+ this.resourceHolder.toString();
-		
+
 		return returnValue;
-	}
+	};
 }

@@ -6,6 +6,8 @@ function Cursor(posInCells)
 	this.entityToPlace = null;
 
 	this.pos = new Coords();
+	var loc = new Location(this.pos);
+	this.Locatable = new Locatable(loc);
 }
 
 {
@@ -21,7 +23,7 @@ function Cursor(posInCells)
 				facilityDefn.resourcesToBuild
 			);
 
-			if (canBuild == true)
+			if (canBuild)
 			{
 				facility.posInCells = this.posInCells.clone();
 				facility.initialize(world, level);
@@ -57,13 +59,13 @@ function Cursor(posInCells)
 	Cursor.prototype.selectInDirection = function(world, level, direction)
 	{
 		var facilityDefns = Globals.Instance.world.facilityDefns;
-	
+
 		if (this.entityToPlace == null)
 		{
 			var facilityDefn = facilityDefns[0];
 			var facility = new Facility
 			(
-				facilityDefn.name, 
+				facilityDefn.name,
 				this.posInCells.clone()
 			);
 			this.entityToPlace = facility;
@@ -108,7 +110,7 @@ function Cursor(posInCells)
 			this.posInCells
 		).add
 		(
-			Coords.Instances.Halves
+			Coords.Instances().Halves
 		).multiply
 		(
 			mapCellSizeInPixels
@@ -133,7 +135,7 @@ function Cursor(posInCells)
 			this.posInCells
 		).add
 		(
-			Coords.Instances.Halves
+			Coords.Instances().Halves
 		).multiply
 		(
 			level.map.cellSizeInPixels
@@ -142,19 +144,18 @@ function Cursor(posInCells)
 
 	// drawable
 
-	Cursor.prototype.drawToDisplay = function(display, world, level)
+	Cursor.prototype.draw = function(universe, world, display, level)
 	{
-		this.visual.drawToDisplayForDrawable(display, this);
+		var drawable = display.drawableDummy;
+		drawable.pos.overwriteWith(this.pos);
+		this.visual.draw(universe, world, display, drawable, this);
 
 		var textColor = "Gray";
 		var timeAsString = level.timeOfDay(world);
 		var visual = new VisualText("Time: " + timeAsString, textColor);
-		var drawableDummy = display.drawableDummy;
-		drawableDummy.pos.clear();
-		visual.drawToDisplayForDrawable
-		(
-			level.paneStatus, drawableDummy
-		);
+		visual = new VisualAnchor(visual, new Coords(0, 0));
+		drawable.pos.clear();
+		visual.draw(universe, world, level.paneStatus, drawable, this);
 
 		var selectionAsText = "[none]";
 
@@ -170,16 +171,13 @@ function Cursor(posInCells)
 				);
 				this.entityToPlace.drawToDisplay
 				(
-					display, world, level
+					universe, world, display, level
 				);
 			}
 		}
 
-		drawableDummy.pos.clear();
-		visual = new VisualText("Selected:\n" + selectionAsText, textColor);
-		visual.drawToDisplayForDrawable
-		(
-			level.paneSelection, drawableDummy
-		);
-	}	
+		drawable.pos.clear();
+		visual.child._text = "Selected:\n" + selectionAsText;
+		visual.draw(universe, world, level.paneSelection, drawable, this);
+	}
 }

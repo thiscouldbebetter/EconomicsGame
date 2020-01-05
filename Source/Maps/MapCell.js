@@ -22,7 +22,7 @@ function MapCell(terrainCode, emplacementCode, posInCells)
 
 	MapCell.prototype.emplacement = function(map)
 	{
-		var emplacementDefn = 
+		var emplacementDefn =
 			map.emplacementDefns[this.emplacementCode];
 
 		return emplacementDefn;
@@ -35,38 +35,36 @@ function MapCell(terrainCode, emplacementCode, posInCells)
 
 	// drawable
 
-	MapCell.prototype.drawToDisplay = function(display, map)
+	MapCell.prototype.draw = function(universe, world, display, map)
 	{
-		var drawableDummy = display.drawableDummy;
+		var drawable = display.drawableDummy;
 
-		var drawPos = drawableDummy.pos;
-			
+		this.Locatable = map._locatable;
+
+		var drawPos =
+			//drawable.pos;
+			this.Locatable.loc.pos;
+
 		drawPos.overwriteWith
 		(
 			this.posInCells
 		).add
 		(
-			Coords.Instances.Halves
+			Coords.Instances().Halves
 		).multiply
 		(
 			map.cellSizeInPixels
 		);
 
-		this.terrain(map).visual.drawToDisplayForDrawable
-		(
-			display,
-			drawableDummy
-		);
+		var visual = this.terrain(map).visual;
+		visual.draw(universe, world, display, drawable, this);
 
 		var emplacement = this.emplacement(map);
 
 		if (emplacement != null)
 		{
-			emplacement.visual.drawToDisplayForDrawable
-			(
-				display,
-				drawableDummy
-			);
+			visual = emplacement.visual;
+			visual.draw(universe, world, display, drawable, this);
 		}
 	}
 }

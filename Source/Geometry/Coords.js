@@ -61,7 +61,7 @@ function Coords(x, y)
 
 	Coords.prototype.equals = function(other)
 	{
-		var returnValue = 
+		var returnValue =
 		(
 			this.x == other.x
 			&& this.y == other.y
@@ -127,7 +127,7 @@ function Coords(x, y)
 		return this;
 	}
 
-	Coords.prototype.sumOfXAndY = function()
+	Coords.prototype.sumOfDimensions = function()
 	{
 		return this.x + this.y;
 	}

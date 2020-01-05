@@ -6,8 +6,8 @@ function VisualText(text, color)
 }
 
 {
-	VisualText.prototype.drawToDisplayForDrawable = function(display, drawable)
+	VisualText.prototype.draw = function(universe, world, display, drawable, entity)
 	{
-		display.drawText(this.text, this.color, drawable.pos);
-	}
+		display.drawText(this.text, null, drawable.pos, this.color);
+	};
 }

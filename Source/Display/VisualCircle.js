@@ -9,10 +9,7 @@ function VisualCircle(radius, colorFill, colorBorder)
 {
 	// methods
 
-	VisualCircle.prototype.drawToDisplayForDrawable = function
-	(
-		display, drawable
-	)
+	VisualCircle.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		display.drawCircle
 		(

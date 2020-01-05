@@ -23,7 +23,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 	{
 		this.drawRectangle
 		(
-			Coords.Instances.Zeroes, this.sizeInPixels,
+			Coords.Instances().Zeroes, this.sizeInPixels,
 			this.colorBack, this.colorFore
 		);
 	}
@@ -69,8 +69,8 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 				pos.x + vertex.x, pos.y + vertex.y
 			);
 		}
-	
-		if (isClosed == true)
+
+		if (isClosed)
 		{
 			this.graphics.closePath();
 
@@ -125,8 +125,8 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 			var textLine = textLines[i];
 			this.graphics.fillText
 			(
-				textLine, 
-				pos.x, 
+				textLine,
+				pos.x,
 				pos.y + ( (i + 1) * this.fontHeightInPixels )
 			);
 		}
@@ -143,7 +143,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 
 		this.graphics = this.canvas.getContext("2d");
 
-		this.graphics.font = 
+		this.graphics.font =
 			this.fontHeightInPixels + "px sans-serif";
 	}
 }

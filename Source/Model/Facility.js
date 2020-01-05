@@ -5,6 +5,8 @@ function Facility(defnName, posInCells)
 	this.posInCells = posInCells;
 
 	this.pos = new Coords();
+	var loc = new Location(this.pos);
+	this.Locatable = new Locatable(loc);
 
 	this.agentAssigned = null;
 
@@ -26,7 +28,7 @@ function Facility(defnName, posInCells)
 			this.posInCells
 		).add
 		(
-			Coords.Instances.Halves
+			Coords.Instances().Halves
 		).multiply
 		(
 			level.map.cellSizeInPixels
@@ -58,13 +60,13 @@ function Facility(defnName, posInCells)
 
 	// drawable
 
-	Facility.prototype.drawToDisplay = function(display, world, level)
+	Facility.prototype.draw = function(universe, world, display, level)
 	{
 		var defn = this.defn(world);
-		defn.visual.drawToDisplayForDrawable
-		(
-			display, this
-		);
+		var visual = defn.visual;
+		var drawable = display.drawableDummy;
+		drawable.pos.overwriteWith(this.pos);
+		visual.draw(universe, world, display, drawable, this);
 	}
 
 	// strings
@@ -73,10 +75,10 @@ function Facility(defnName, posInCells)
 	{
 		var newline = "\n";
 
-		var returnValue = 
+		var returnValue =
 			this.defnName + newline
 			+ this.resourceHolder.toString();
-		
+
 		return returnValue;
 	}
 }

@@ -15,10 +15,7 @@ function VisualRectangle(size, colorFill, colorBorder)
 
 	// methods
 
-	VisualRectangle.prototype.drawToDisplayForDrawable = function
-	(
-		display, drawable
-	)
+	VisualRectangle.prototype.draw = function(universe, world, display, drawable, entity)
 	{
 		var drawPos = VisualRectangle.drawPos;
 		drawPos.overwriteWith

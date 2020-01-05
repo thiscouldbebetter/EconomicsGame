@@ -18,7 +18,7 @@ function Bounds(min, max)
 			&& pointToCheck.y <= this.max.y
 		);
 
-		return returnValue;	
+		return returnValue;
 	}
 
 	Bounds.prototype.fromPoints = function(points)

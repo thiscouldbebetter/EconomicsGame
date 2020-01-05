@@ -9,19 +9,17 @@ function Level(name, map, owner, facilities, agents)
 
 	this.cursor = new Cursor(this.map.sizeInCells.clone().divideScalar(2));
 
-	this.inputToActionMappings = 
+	this.actionToInputsMappings =
 	[
-		new InputToActionMapping("ArrowDown", "MoveDown"),
-		new InputToActionMapping("ArrowLeft", "MoveLeft"),
-		new InputToActionMapping("ArrowRight", "MoveRight"),
-		new InputToActionMapping("ArrowUp", "MoveUp"),
-		new InputToActionMapping("Enter", "Activate"),
-		new InputToActionMapping("Escape", "Cancel"),
-		new InputToActionMapping("[", "SelectPrevious"),
-		new InputToActionMapping("]", "SelectNext"),
-		
-
-	].addLookups("inputName");
+		new ActionToInputsMapping("MoveDown", "ArrowDown"),
+		new ActionToInputsMapping("MoveLeft", "ArrowLeft"),
+		new ActionToInputsMapping("MoveRight", "ArrowRight"),
+		new ActionToInputsMapping("MoveUp", "ArrowUp"),
+		new ActionToInputsMapping("Activate", "Enter"),
+		new ActionToInputsMapping("Cancel", "Escape"),
+		new ActionToInputsMapping("SelectPrevious", "["),
+		new ActionToInputsMapping("SelectNext", "]"),
+	].addLookups(x => x.inputNames);
 }
 
 {
@@ -34,7 +32,7 @@ function Level(name, map, owner, facilities, agents)
 			this.map.cellSizeInPixels
 		).floor();
 
-		var entitySets = 
+		var entitySets =
 		[
 			this.facilities, this.agents
 		];
@@ -65,11 +63,11 @@ function Level(name, map, owner, facilities, agents)
 
 	Level.prototype.fractionOfDayNightCycleCompleted = function(world)
 	{
-		var secondsSinceSunrise = 
-			this.secondsSinceStarted() 
+		var secondsSinceSunrise =
+			this.secondsSinceStarted()
 			% world.dayNightCyclePeriodInSeconds;
-		
-		var returnValue = 
+
+		var returnValue =
 			secondsSinceSunrise / world.dayNightCyclePeriodInSeconds;
 
 		return returnValue;
@@ -96,8 +94,8 @@ function Level(name, map, owner, facilities, agents)
 
 		this.paneMap = new Pane
 		(
-			Coords.Instances.Zeroes,
-			this.map.sizeInPixels	
+			Coords.Instances().Zeroes,
+			this.map.sizeInPixels
 		);
 
 		this.paneStatus = new Pane
@@ -105,7 +103,7 @@ function Level(name, map, owner, facilities, agents)
 			new Coords(this.map.sizeInPixels.x, 0),
 			new Coords
 			(
-				this.map.sizeInPixels.x / 3, 
+				this.map.sizeInPixels.x / 3,
 				this.map.sizeInPixels.y / 2
 			)
 		);
@@ -115,7 +113,7 @@ function Level(name, map, owner, facilities, agents)
 			new Coords(this.map.sizeInPixels.x, this.map.sizeInPixels.y / 2),
 			new Coords
 			(
-				this.map.sizeInPixels.x / 3, 
+				this.map.sizeInPixels.x / 3,
 				this.map.sizeInPixels.y / 2
 			)
 		);
@@ -125,8 +123,8 @@ function Level(name, map, owner, facilities, agents)
 
 	Level.prototype.secondsSinceStarted = function()
 	{
-		var secondsSinceStarted = 
-			this.ticksSinceStarted 
+		var secondsSinceStarted =
+			this.ticksSinceStarted
 			/ Globals.Instance.timerTicksPerSecond;
 
 		return secondsSinceStarted;
@@ -154,40 +152,32 @@ function Level(name, map, owner, facilities, agents)
 		var returnValue = timeHours + ":" + timeMinutes;
 
 		return returnValue;
-	}
+	};
 
 	Level.prototype.updateForTimerTick = function(world)
 	{
-		this.drawToDisplay(Globals.Instance.display, world);
+		this.draw(null, world, Globals.Instance.display);
 
 		this.updateForTimerTick_1_Input(world);
 
 		this.updateForTimerTick_2_Entities(world);
 
 		this.ticksSinceStarted++;
-	}
+	};
 
 	Level.prototype.updateForTimerTick_1_Input = function(world)
 	{
 		var inputHelper = Globals.Instance.inputHelper;
+		var mappings = this.actionToInputsMappings;
+		var actions = world.actions;
 
-		var keyPressed = inputHelper.keyPressed;
-
-		if (keyPressed != null)
+		var actionsFromInput = inputHelper.actionsFromInput(actions, mappings);
+		for (var i = 0; i < actionsFromInput.length; i++)
 		{
-			inputHelper.keyPressed = null;
-
-			var mappingForKeyPressed = 
-				this.inputToActionMappings[keyPressed];
-
-			if (mappingForKeyPressed != null)
-			{
-				var actionName = mappingForKeyPressed.actionName;
-				var action = world.actions[actionName];
-				action.perform(world, this);
-			}
+			var action = actionsFromInput[i];
+			action.perform(world, this);
 		}
-	}
+	};
 
 	Level.prototype.updateForTimerTick_2_Entities = function(world)
 	{
@@ -204,28 +194,28 @@ function Level(name, map, owner, facilities, agents)
 		}
 
 		this.cursor.updateForTimerTick(world, this);
-	}
+	};
 
 	// drawable
 
-	Level.prototype.drawToDisplay = function(display, world)
+	Level.prototype.draw = function(universe, world, display)
 	{
 		display.clear();
 
-		this.map.drawToDisplay(this.paneMap, world, this);
+		this.map.draw(universe, world, this.paneMap, this);
 
 		for (var i = 0; i < this.facilities.length; i++)
 		{
 			var facility = this.facilities[i];
-			facility.drawToDisplay(this.paneMap, world, this);
+			facility.draw(universe, world, this.paneMap, this);
 		}
 
 		for (var i = 0; i < this.agents.length; i++)
 		{
 			var agent = this.agents[i];
-			agent.drawToDisplay(this.paneMap, world, this);
+			agent.draw(universe, world, this.paneMap, this);
 		}
 
-		this.cursor.drawToDisplay(this.paneMap, world, this);
+		this.cursor.draw(universe, world, this.paneMap, this);
 	}
 }

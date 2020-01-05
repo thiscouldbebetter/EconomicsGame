@@ -2,11 +2,15 @@ function main()
 {
 	var display = new Display
 	(
-		new Coords(400, 300),
+		[ new Coords(400, 300) ],
+		"sans-serif", // fontName
 		8, // fontHeightInPixels
 		"LightGray", // colorFore
 		"White" // colorBack
 	);
+
+	display.drawableDummy = {};
+	display.drawableDummy.pos = new Coords();
 
 	var mapSizeInPixels = display.sizeInPixels.clone().multiply
 	(

@@ -2,23 +2,23 @@
 
 function World
 (
-	name, 
-	dayNightCyclePeriodInSeconds, 
+	name,
+	dayNightCyclePeriodInSeconds,
 	resourceDefns,
-	mapEmplacementDefns, 
-	facilityDefns, 
-	agentDefns, 
-	actions, 
+	mapEmplacementDefns,
+	facilityDefns,
+	agentDefns,
+	actions,
 	level
 )
 {
 	this.name = name;
 	this.dayNightCyclePeriodInSeconds = dayNightCyclePeriodInSeconds;
-	this.resourceDefns = resourceDefns.addLookups("name");
-	this.mapEmplacementDefns = mapEmplacementDefns.addLookups("name");
-	this.facilityDefns = facilityDefns.addLookups("name");
-	this.agentDefns = agentDefns.addLookups("name");
-	this.actions = actions.addLookups("name");
+	this.resourceDefns = resourceDefns.addLookupsByName();
+	this.mapEmplacementDefns = mapEmplacementDefns.addLookupsByName();
+	this.facilityDefns = facilityDefns.addLookupsByName();
+	this.agentDefns = agentDefns.addLookupsByName();
+	this.actions = actions.addLookupsByName();
 	this.level = level;
 }
 

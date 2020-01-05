@@ -1,4 +1,4 @@
- 
+
 function PathNode(cellPos, costFromStart, costToGoalEstimated, prev)
 {
 	this.cellPos = cellPos;
@@ -10,31 +10,31 @@ function PathNode(cellPos, costFromStart, costToGoalEstimated, prev)
 {
 	PathNode.prototype.id = function(mapSizeInCells)
 	{
-		var nodeToConsiderIndex = 
-			this.cellPos.y 
-			* mapSizeInCells.y 
+		var nodeToConsiderIndex =
+			this.cellPos.y
+			* mapSizeInCells.y
 			+ this.cellPos.x;
-		 
+
 		var returnValue = "_" + nodeToConsiderIndex;
-		 
+
 		return returnValue;
 	}
-	 
+
 	PathNode.prototype.neighbors = function(path)
 	{
 		var map = path.map;
-		 
+
 		var returnValues = [];
 		var mapBoundsInCellsMinusOnes = map.boundsInCellsMinusOnes;
 		var costToGoalTemp = new Coords();
 		var neighborPos = new Coords();
-		 
+
 		var neighborOffsets = map.neighborOffsets;
-		 
+
 		for (var i = 0; i < neighborOffsets.length; i++)
 		{
 			var neighborOffset = neighborOffsets[i];
-			 
+
 			neighborPos.overwriteWith
 			(
 				this.cellPos
@@ -42,17 +42,17 @@ function PathNode(cellPos, costFromStart, costToGoalEstimated, prev)
 			(
 				neighborOffset
 			);
-			 
-			if (mapBoundsInCellsMinusOnes.containsPoint(neighborPos) == true)
+
+			if (mapBoundsInCellsMinusOnes.containsPoint(neighborPos))
 			{
 				var neighborMapCell = map.cellAtPosInCells(neighborPos);
 				var neighborCostToTraverse = neighborMapCell.costToTraverse(map);
-				 
-				var neighborCostFromStart = 
-					this.costFromStart 
+
+				var neighborCostFromStart =
+					this.costFromStart
 					+ neighborCostToTraverse;
-				 
-				var neighborCostToGoalEstimated = 
+
+				var neighborCostToGoalEstimated =
 					neighborCostToTraverse
 					+ costToGoalTemp.overwriteWith
 					(
@@ -60,8 +60,8 @@ function PathNode(cellPos, costFromStart, costToGoalEstimated, prev)
 					).subtract
 					(
 						this.cellPos
-					).absolute().sumOfXAndY();
-				 
+					).absolute().sumOfDimensions();
+
 				var neighborNode = new PathNode
 				(
 					neighborPos.clone(),
@@ -69,11 +69,11 @@ function PathNode(cellPos, costFromStart, costToGoalEstimated, prev)
 					neighborCostToGoalEstimated,
 					this // prev
 				);
-				 
+
 				returnValues.push(neighborNode);
 			}
 		}
-	 
+
 		return returnValues;
 	}
 }
