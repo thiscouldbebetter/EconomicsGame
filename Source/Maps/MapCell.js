@@ -37,13 +37,8 @@ function MapCell(terrainCode, emplacementCode, posInCells)
 
 	MapCell.prototype.draw = function(universe, world, display, map)
 	{
-		var drawable = display.drawableDummy;
-
-		this.Locatable = map._locatable;
-
-		var drawPos =
-			//drawable.pos;
-			this.Locatable.loc.pos;
+		this.locatable = map._locatable;
+		var drawPos = this.locatable.loc.pos;
 
 		drawPos.overwriteWith
 		(
@@ -57,14 +52,14 @@ function MapCell(terrainCode, emplacementCode, posInCells)
 		);
 
 		var visual = this.terrain(map).visual;
-		visual.draw(universe, world, display, drawable, this);
+		visual.draw(universe, world, display, this);
 
 		var emplacement = this.emplacement(map);
 
 		if (emplacement != null)
 		{
 			visual = emplacement.visual;
-			visual.draw(universe, world, display, drawable, this);
+			visual.draw(universe, world, display, this);
 		}
 	}
 }

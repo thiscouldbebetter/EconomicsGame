@@ -7,7 +7,8 @@ function Agent(name, defnName, posInCells)
 
 	this.pos = new Coords();
 	var loc = new Location(this.pos);
-	this.Locatable = new Locatable(loc);
+	this.locatable = new Locatable(loc);
+	this.drawable = {};
 
 	this.resourceHolder = new ResourceHolder();
 	this.facilityHome = null;
@@ -53,13 +54,15 @@ function Agent(name, defnName, posInCells)
 			path.calculate();
 
 			var directionToGoal;
+			var forward = this.locatable.loc.orientation.forward;
 
 			if (path.nodes.length < 2)
 			{
 				directionToGoal = displacementToGoal.clone().divideScalar
 				(
 					distanceToGoal
-				)
+				);
+				forward.overwriteWith(Coords.Instances().Zeroes);
 			}
 			else
 			{
@@ -69,6 +72,8 @@ function Agent(name, defnName, posInCells)
 				(
 					path.startPos
 				).normalize();
+
+				forward.overwriteWith(directionToGoal);
 			}
 
 			var moveTowardGoal = directionToGoal.clone().multiplyScalar
@@ -191,9 +196,7 @@ function Agent(name, defnName, posInCells)
 	Agent.prototype.draw = function(universe, world, display, level)
 	{
 		var visual = this.defn(world).visual;
-		var drawable = display.drawableDummy;
-		drawable.pos.overwriteWith(this.pos);
-		visual.draw(universe, world, display, drawable, this);
+		visual.draw(universe, world, display, this);
 	};
 
 	// strings

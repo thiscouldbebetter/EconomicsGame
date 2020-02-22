@@ -7,7 +7,7 @@ function Cursor(posInCells)
 
 	this.pos = new Coords();
 	var loc = new Location(this.pos);
-	this.Locatable = new Locatable(loc);
+	this.locatable = new Locatable(loc);
 }
 
 {
@@ -75,10 +75,12 @@ function Cursor(posInCells)
 			var facility = this.entityToPlace;
 			var facilityDefn = facilityDefns[facility.defnName];
 			var facilityDefnIndex = facilityDefns.indexOf(facilityDefn);
-			facilityDefnIndex = NumberHelper.wrapValueToRangeMinMax
+			facilityDefnIndex = 
 			(
-				facilityDefnIndex + direction,
-				0, facilityDefns.length
+				facilityDefnIndex + direction
+			).wrapToRangeMax
+			(
+				facilityDefns.length - 1
 			);
 			facility.defnName = facilityDefns[facilityDefnIndex].name;
 		}
@@ -146,16 +148,13 @@ function Cursor(posInCells)
 
 	Cursor.prototype.draw = function(universe, world, display, level)
 	{
-		var drawable = display.drawableDummy;
-		drawable.pos.overwriteWith(this.pos);
-		this.visual.draw(universe, world, display, drawable, this);
+		this.visual.draw(universe, world, display, this);
 
 		var textColor = "Gray";
 		var timeAsString = level.timeOfDay(world);
 		var visual = new VisualText("Time: " + timeAsString, textColor);
 		visual = new VisualAnchor(visual, new Coords(0, 0));
-		drawable.pos.clear();
-		visual.draw(universe, world, level.paneStatus, drawable, this);
+		visual.draw(universe, world, level.paneStatus, this);
 
 		var selectionAsText = "[none]";
 
@@ -176,8 +175,7 @@ function Cursor(posInCells)
 			}
 		}
 
-		drawable.pos.clear();
 		visual.child._text = "Selected:\n" + selectionAsText;
-		visual.draw(universe, world, level.paneSelection, drawable, this);
+		visual.draw(universe, world, level.paneSelection, this);
 	}
 }

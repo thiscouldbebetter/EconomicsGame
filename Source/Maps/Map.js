@@ -18,7 +18,7 @@ function Map
 		cellTerrainsAsStrings.length
 	);
 
-	this.boundsInCellsMinusOnes = Box.fromMinAndMax
+	this.boundsInCellsMinusOnes = new Box().fromMinAndMax
 	(
 		Coords.Instances().Zeroes,
 		this.sizeInCells.clone().subtract

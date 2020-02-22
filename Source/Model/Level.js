@@ -147,7 +147,7 @@ function Level(name, map, owner, facilities, agents)
 		var minutesFullSinceSunrise = Math.floor(timeAsFraction * minutesPerDay);
 		var minutesSinceStartOfHour = minutesFullSinceSunrise % minutesPerHour;
 
-		var timeMinutes = ("" + minutesSinceStartOfHour).padLeft("0", 2);
+		var timeMinutes = ("" + minutesSinceStartOfHour).padStart(2, "0");
 
 		var returnValue = timeHours + ":" + timeMinutes;
 

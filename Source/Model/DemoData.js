@@ -167,16 +167,21 @@ function DemoData()
 
 		var facilityDefns = this.world_FacilityDefns(facilitySize)
 
-		var agentColor = "LightGreen";
+		var agentColor = "Gray";
+		var agentRadius = facilitySize.x / 2;
+		var agentVisual =
+			//new VisualCircle(facilitySize.x / 2, agentColor, agentColor);
+			VisualBuilder.Instance().circleWithEyes
+			(
+				agentRadius, agentColor, agentRadius / 2
+			);
+
 		var agentDefns =
 		[
 			new AgentDefn
 			(
 				"AgentDefn0",
-				new VisualCircle
-				(
-					facilitySize.x / 2, agentColor, agentColor
-				),
+				agentVisual,
 				0, // wealthInitial
 				// resourcesWeighted
 				[

@@ -6,7 +6,7 @@ function Facility(defnName, posInCells)
 
 	this.pos = new Coords();
 	var loc = new Location(this.pos);
-	this.Locatable = new Locatable(loc);
+	this.locatable = new Locatable(loc);
 
 	this.agentAssigned = null;
 
@@ -64,9 +64,7 @@ function Facility(defnName, posInCells)
 	{
 		var defn = this.defn(world);
 		var visual = defn.visual;
-		var drawable = display.drawableDummy;
-		drawable.pos.overwriteWith(this.pos);
-		visual.draw(universe, world, display, drawable, this);
+		visual.draw(universe, world, display, this);
 	}
 
 	// strings
