@@ -1,17 +1,18 @@
 
-function Cursor(posInCells)
+class Cursor
 {
-	this.posInCells = posInCells;
-	this.entitySelected = null;
-	this.entityToPlace = null;
+	constructor(posInCells)
+	{
+		this.posInCells = posInCells;
+		this.entitySelected = null;
+		this.entityToPlace = null;
 
-	this.pos = new Coords();
-	var loc = new Location(this.pos);
-	this.locatable = new Locatable(loc);
-}
+		this.pos = new Coords();
+		var loc = new Location(this.pos);
+		this.locatable = new Locatable(loc);
+	}
 
-{
-	Cursor.prototype.activate = function(world, level)
+	activate(world, level)
 	{
 		if (this.entityToPlace != null)
 		{
@@ -51,12 +52,12 @@ function Cursor(posInCells)
 		}
 	}
 
-	Cursor.prototype.cancel = function(world, level)
+	cancel(world, level)
 	{
 		this.entitySelected = null;
 	}
 
-	Cursor.prototype.selectInDirection = function(world, level, direction)
+	selectInDirection(world, level, direction)
 	{
 		var facilityDefns = Globals.Instance.world.facilityDefns;
 
@@ -89,7 +90,7 @@ function Cursor(posInCells)
 	}
 
 
-	Cursor.prototype.moveInDirection = function(level, direction)
+	moveInDirection(level, direction)
 	{
 		this.posInCells.add
 		(
@@ -103,7 +104,7 @@ function Cursor(posInCells)
 
 	// entity
 
-	Cursor.prototype.initialize = function(world, level)
+	initialize(world, level)
 	{
 		var mapCellSizeInPixels = level.map.cellSizeInPixels;
 
@@ -128,7 +129,7 @@ function Cursor(posInCells)
 		);
 	}
 
-	Cursor.prototype.updateForTimerTick = function(world, level)
+	updateForTimerTick(world, level)
 	{
 		var mapCellSizeInPixels = level.map.cellSizeInPixels;
 
@@ -146,7 +147,7 @@ function Cursor(posInCells)
 
 	// drawable
 
-	Cursor.prototype.draw = function(universe, world, display, level)
+	draw(universe, world, display, level)
 	{
 		this.visual.draw(universe, world, display, this);
 

@@ -1,12 +1,7 @@
 
-// demo
-
-function DemoData()
+class DemoData
 {
-	// do nothing
-}
-{
-	DemoData.prototype.world = function(mapSizeInPixels)
+	world(mapSizeInPixels)
 	{
 		var mapSizeInCells = new Coords(16, 16);
 		var mapCellSizeInPixels = mapSizeInPixels.clone().divide
@@ -191,7 +186,7 @@ function DemoData()
 			)
 		].addLookupsByName();
 
-		var actions = Action.Instances._All;
+		var actions = Action.Instances()._All;
 
 		var level = new Level
 		(
@@ -224,7 +219,7 @@ function DemoData()
 		return world;
 	}
 
-	DemoData.prototype.world_FacilityDefns = function(facilitySize)
+	world_FacilityDefns(facilitySize)
 	{
 		var houseColor = "DarkGray";
 		var house = new FacilityDefn

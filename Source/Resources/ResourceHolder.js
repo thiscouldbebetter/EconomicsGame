@@ -1,11 +1,12 @@
 
-function ResourceHolder()
+class ResourceHolder
 {
-	this.resources = [];
-}
+	constructor()
+	{
+		this.resources = [];
+	}
 
-{
-	ResourceHolder.prototype.hasResources = function(resourcesToCheck)
+	hasResources(resourcesToCheck)
 	{
 		var returnValue = true;
 
@@ -26,7 +27,7 @@ function ResourceHolder()
 		return returnValue;
 	}
 
-	ResourceHolder.prototype.resourceAdd = function(resourceToAdd)
+	resourceAdd(resourceToAdd)
 	{
 		var resourceDefnName = resourceToAdd.defnName;
 		var resourceExisting = this.resources[resourceDefnName];
@@ -47,7 +48,7 @@ function ResourceHolder()
 
 	}
 
-	ResourceHolder.prototype.resourceTransferToOther = function
+	resourceTransferToOther
 	(
 		resourceToTransfer, other
 	)
@@ -60,7 +61,7 @@ function ResourceHolder()
 		}
 	}
 
-	ResourceHolder.prototype.resourcesAdd = function(resourcesToAdd)
+	resourcesAdd(resourcesToAdd)
 	{
 		for (var i = 0; i < resourcesToAdd.length; i++)
 		{
@@ -71,7 +72,7 @@ function ResourceHolder()
 
 	// strings
 
-	ResourceHolder.prototype.toString = function()
+	toString()
 	{
 		var returnValue = this.resources.toString().split(",").join("\n");
 

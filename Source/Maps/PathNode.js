@@ -1,14 +1,15 @@
 
-function PathNode(cellPos, costFromStart, costToGoalEstimated, prev)
+class PathNode
 {
-	this.cellPos = cellPos;
-	this.costFromStart = costFromStart;
-	this.costToGoalEstimated = costToGoalEstimated;
-	this.prev = prev;
-}
+	constructor(cellPos, costFromStart, costToGoalEstimated, prev)
+	{
+		this.cellPos = cellPos;
+		this.costFromStart = costFromStart;
+		this.costToGoalEstimated = costToGoalEstimated;
+		this.prev = prev;
+	}
 
-{
-	PathNode.prototype.id = function(mapSizeInCells)
+	id(mapSizeInCells)
 	{
 		var nodeToConsiderIndex =
 			this.cellPos.y
@@ -20,7 +21,7 @@ function PathNode(cellPos, costFromStart, costToGoalEstimated, prev)
 		return returnValue;
 	}
 
-	PathNode.prototype.neighbors = function(path)
+	neighbors(path)
 	{
 		var map = path.map;
 

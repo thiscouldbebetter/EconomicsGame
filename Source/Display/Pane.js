@@ -1,17 +1,18 @@
 
-function Pane(pos, size)
+class Pane
 {
-	this.pos = pos;
-	this.size = size;
+	constructor(pos, size)
+	{
+		this.pos = pos;
+		this.size = size;
 
-	// helper variables
+		// helper variables
 
-	this.drawPos = new Coords();
-	this.drawableDummy = new DrawableDummy();
-}
+		this.drawPos = new Coords();
+		this.drawableDummy = new DrawableDummy();
+	}
 
-{
-	Pane.prototype.clear = function()
+	clear()
 	{
 		this.drawRectangle
 		(
@@ -20,7 +21,7 @@ function Pane(pos, size)
 		);
 	}
 
-	Pane.prototype.drawCircle = function
+	drawCircle
 	(
 		centerPos, radius, colorFill, colorBorder
 	)
@@ -35,16 +36,13 @@ function Pane(pos, size)
 		);
 	}
 
-	Pane.prototype.drawPath = function(vertices, color, lineThickness, isClosed)
+	drawPath(vertices, color, lineThickness, isClosed)
 	{
 		var display = Globals.Instance.display;
 		display.drawPath(vertices, color, lineThickness, isClosed);
 	}
 
-	Pane.prototype.drawRectangle = function
-	(
-		pos, size, colorFill, colorBorder
-	)
+	drawRectangle(pos, size, colorFill, colorBorder)
 	{
 		var drawPos = this.drawPos;
 		drawPos.overwriteWith(this.pos).add(pos);
@@ -56,7 +54,7 @@ function Pane(pos, size)
 		);
 	}
 
-	Pane.prototype.drawText = function(textToDraw, fontHeightInPixels, pos, color)
+	drawText(textToDraw, fontHeightInPixels, pos, color)
 	{
 		var drawPos = this.drawPos;
 		drawPos.overwriteWith(this.pos).add(pos);

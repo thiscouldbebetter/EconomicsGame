@@ -1,6 +1,9 @@
 
-function AgentDefn(name, visual)
+class AgentDefn
 {
-	this.name = name;
-	this.visual = visual;
+	constructor(name, visual)
+	{
+		this.name = name;
+		this.visual = visual;
+	}
 }

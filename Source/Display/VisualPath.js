@@ -1,31 +1,32 @@
 
-function VisualPath(verticesAsPath, color, lineThickness, isClosed)
+class VisualPath
 {
-	this.verticesAsPath = verticesAsPath;
-	this.color = color;
-	this.isClosed = isClosed;
+	constructor(verticesAsPath, color, lineThickness, isClosed)
+	{
+		this.verticesAsPath = verticesAsPath;
+		this.color = color;
+		this.isClosed = isClosed;
 
-	this.size = new Box
-	(
-		new Coords(), new Coords()
-	).ofPoints
-	(
-		this.verticesAsPath.points
-	).size;
+		this.size = new Box
+		(
+			new Coords(), new Coords()
+		).ofPoints
+		(
+			this.verticesAsPath.points
+		).size;
 
-	this.sizeHalf = this.size.clone().divideScalar(2);
+		this.sizeHalf = this.size.clone().divideScalar(2);
 
-	this.verticesAsPathTransformed = this.verticesAsPath.clone();
-}
+		this.verticesAsPathTransformed = this.verticesAsPath.clone();
 
-{
-	// helper variables
+		// Helper variables.
 
-	VisualPath.drawPos = new Coords();
+		this._drawPos = new Coords();
+	}
 
 	// methods
 
-	VisualPath.prototype.draw = function(universe, world, display, drawable, entity)
+	draw(universe, world, display, drawable, entity)
 	{
 		var drawPos = VisualPath.drawPos;
 		drawPos.overwriteWith

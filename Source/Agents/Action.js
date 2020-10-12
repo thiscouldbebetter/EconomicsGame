@@ -1,18 +1,27 @@
 
-// classes
-
-function Action(name, perform)
+class Action
 {
-	this.name = name;
-	this.perform = perform;
-}
+	constructor(name, perform)
+	{
+		this.name = name;
+		this.perform = perform;
+	}
 
-{
 	// instances
 
-	Action.Instances = new Action_Instances();
+	static Instances()
+	{
+		if (Action._instances == null)
+		{
+			Action._instances = new Action_Instances();
+		}
+		return Action._instances;
+	}
+}
 
-	function Action_Instances()
+class Action_Instances
+{
+	constructor()
 	{
 		this.Activate = new Action
 		(
@@ -85,7 +94,6 @@ function Action(name, perform)
 				level.cursor.selectInDirection(world, level, -1);
 			}
 		);
-
 
 		this._All =
 		[

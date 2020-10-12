@@ -1,15 +1,16 @@
 
-function VisualCircle(radius, colorFill, colorBorder)
+class VisualCircle
 {
-	this.radius = radius;
-	this.colorFill = colorFill;
-	this.colorBorder = colorBorder;
-}
+	constructor(radius, colorFill, colorBorder)
+	{
+		this.radius = radius;
+		this.colorFill = colorFill;
+		this.colorBorder = colorBorder;
+	}
 
-{
 	// methods
 
-	VisualCircle.prototype.draw = function(universe, world, display, drawable, entity)
+	draw(universe, world, display, drawable, entity)
 	{
 		display.drawCircle
 		(

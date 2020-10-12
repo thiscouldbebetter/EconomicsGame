@@ -1,13 +1,14 @@
 
-function MapCell(terrainCode, emplacementCode, posInCells)
+class MapCell
 {
-	this.terrainCode = terrainCode;
-	this.emplacementCode = emplacementCode;
-	this.posInCells = posInCells;
-}
+	constructor(terrainCode, emplacementCode, posInCells)
+	{
+		this.terrainCode = terrainCode;
+		this.emplacementCode = emplacementCode;
+		this.posInCells = posInCells;
+	}
 
-{
-	MapCell.prototype.costToTraverse = function(map)
+	costToTraverse(map)
 	{
 		var returnValue = this.terrain(map).costToTraverse;
 
@@ -20,7 +21,7 @@ function MapCell(terrainCode, emplacementCode, posInCells)
 		return returnValue;
 	}
 
-	MapCell.prototype.emplacement = function(map)
+	emplacement(map)
 	{
 		var emplacementDefn =
 			map.emplacementDefns[this.emplacementCode];
@@ -28,14 +29,14 @@ function MapCell(terrainCode, emplacementCode, posInCells)
 		return emplacementDefn;
 	}
 
-	MapCell.prototype.terrain = function(map)
+	terrain(map)
 	{
 		return map.terrains[this.terrainCode];
 	}
 
 	// drawable
 
-	MapCell.prototype.draw = function(universe, world, display, map)
+	draw(universe, world, display, map)
 	{
 		this.locatable = map._locatable;
 		var drawPos = this.locatable.loc.pos;

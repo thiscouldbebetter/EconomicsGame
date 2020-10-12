@@ -1,13 +1,14 @@
 
-function PathAgent(map, startPos, goalPos)
+class PathAgent
 {
-	this.map = map;
-	this.startPos = startPos;
-	this.goalPos = goalPos;
-}
+	constructor(map, startPos, goalPos)
+	{
+		this.map = map;
+		this.startPos = startPos;
+		this.goalPos = goalPos;
+	}
 
-{
-	PathAgent.prototype.calculate = function()
+	calculate()
 	{
 		var nodesToConsider = this.calculate_1_InitializeListOfNodesToConsider();
 		var nodesAlreadyConsidered = [];
@@ -40,7 +41,7 @@ function PathAgent(map, startPos, goalPos)
 		}
 	}
 
-	PathAgent.prototype.calculate_1_InitializeListOfNodesToConsider = function()
+	calculate_1_InitializeListOfNodesToConsider()
 	{
 		var nodesToConsider = [];
 
@@ -68,9 +69,9 @@ function PathAgent(map, startPos, goalPos)
 		nodesToConsider.push(startNode);
 
 		return nodesToConsider;
-	};
+	}
 
-	PathAgent.prototype.calculate_2_AddNeighborsToListOfNodesToConsider = function
+	calculate_2_AddNeighborsToListOfNodesToConsider
 	(
 		nodeToFindNeighborsOf,
 		nodesToConsider,
@@ -103,9 +104,9 @@ function PathAgent(map, startPos, goalPos)
 				nodesToConsider[nodeNeighborID] = nodeNeighbor;
 			}
 		}
-	};
+	}
 
-	PathAgent.prototype.calculate_3_BuildListOfNodesFromStartToGoal = function(nodeGoal)
+	calculate_3_BuildListOfNodesFromStartToGoal(nodeGoal)
 	{
 		var returnValues = [];
 
@@ -128,5 +129,5 @@ function PathAgent(map, startPos, goalPos)
 		}
 
 		return returnValues;
-	};
+	}
 }

@@ -1,29 +1,30 @@
 
-function Level(name, map, owner, facilities, agents)
+class Level
 {
-	this.name = name;
-	this.map = map;
-	this.owner = owner;
-	this.facilities = facilities.addLookupLists("defnName");
-	this.agents = agents;
+	constructor(name, map, owner, facilities, agents)
+	{
+		this.name = name;
+		this.map = map;
+		this.owner = owner;
+		this.facilities = facilities.addLookupLists("defnName");
+		this.agents = agents;
 
-	this.cursor = new Cursor(this.map.sizeInCells.clone().divideScalar(2));
+		this.cursor = new Cursor(this.map.sizeInCells.clone().divideScalar(2));
 
-	this.actionToInputsMappings =
-	[
-		new ActionToInputsMapping("MoveDown", "ArrowDown"),
-		new ActionToInputsMapping("MoveLeft", "ArrowLeft"),
-		new ActionToInputsMapping("MoveRight", "ArrowRight"),
-		new ActionToInputsMapping("MoveUp", "ArrowUp"),
-		new ActionToInputsMapping("Activate", "Enter"),
-		new ActionToInputsMapping("Cancel", "Escape"),
-		new ActionToInputsMapping("SelectPrevious", "["),
-		new ActionToInputsMapping("SelectNext", "]"),
-	].addLookups(x => x.inputNames);
-}
+		this.actionToInputsMappings =
+		[
+			new ActionToInputsMapping("MoveDown", "ArrowDown"),
+			new ActionToInputsMapping("MoveLeft", "ArrowLeft"),
+			new ActionToInputsMapping("MoveRight", "ArrowRight"),
+			new ActionToInputsMapping("MoveUp", "ArrowUp"),
+			new ActionToInputsMapping("Activate", "Enter"),
+			new ActionToInputsMapping("Cancel", "Escape"),
+			new ActionToInputsMapping("SelectPrevious", "["),
+			new ActionToInputsMapping("SelectNext", "]"),
+		].addLookups(x => x.inputNames);
+	}
 
-{
-	Level.prototype.entitiesAtPos = function(world, posToCheck, listToAddTo)
+	entitiesAtPos(world, posToCheck, listToAddTo)
 	{
 		var returnValue = null;
 
@@ -61,7 +62,7 @@ function Level(name, map, owner, facilities, agents)
 		return listToAddTo;
 	}
 
-	Level.prototype.fractionOfDayNightCycleCompleted = function(world)
+	fractionOfDayNightCycleCompleted(world)
 	{
 		var secondsSinceSunrise =
 			this.secondsSinceStarted()
@@ -73,7 +74,7 @@ function Level(name, map, owner, facilities, agents)
 		return returnValue;
 	}
 
-	Level.prototype.initialize = function(world)
+	initialize(world)
 	{
 		for (var i = 0; i < this.facilities.length; i++)
 		{
@@ -121,7 +122,7 @@ function Level(name, map, owner, facilities, agents)
 		this.ticksSinceStarted = 0;
 	}
 
-	Level.prototype.secondsSinceStarted = function()
+	secondsSinceStarted()
 	{
 		var secondsSinceStarted =
 			this.ticksSinceStarted
@@ -130,7 +131,7 @@ function Level(name, map, owner, facilities, agents)
 		return secondsSinceStarted;
 	}
 
-	Level.prototype.timeOfDay = function(world)
+	timeOfDay(world)
 	{
 		var timeAsFraction = this.fractionOfDayNightCycleCompleted(world);
 		var hoursPerDay = 24;
@@ -152,9 +153,9 @@ function Level(name, map, owner, facilities, agents)
 		var returnValue = timeHours + ":" + timeMinutes;
 
 		return returnValue;
-	};
+	}
 
-	Level.prototype.updateForTimerTick = function(world)
+	updateForTimerTick(world)
 	{
 		this.draw(null, world, Globals.Instance.display);
 
@@ -163,9 +164,9 @@ function Level(name, map, owner, facilities, agents)
 		this.updateForTimerTick_2_Entities(world);
 
 		this.ticksSinceStarted++;
-	};
+	}
 
-	Level.prototype.updateForTimerTick_1_Input = function(world)
+	updateForTimerTick_1_Input(world)
 	{
 		var inputHelper = Globals.Instance.inputHelper;
 		var mappings = this.actionToInputsMappings;
@@ -177,9 +178,9 @@ function Level(name, map, owner, facilities, agents)
 			var action = actionsFromInput[i];
 			action.perform(world, this);
 		}
-	};
+	}
 
-	Level.prototype.updateForTimerTick_2_Entities = function(world)
+	updateForTimerTick_2_Entities(world)
 	{
 		for (var i = 0; i < this.facilities.length; i++)
 		{
@@ -194,11 +195,11 @@ function Level(name, map, owner, facilities, agents)
 		}
 
 		this.cursor.updateForTimerTick(world, this);
-	};
+	}
 
 	// drawable
 
-	Level.prototype.draw = function(universe, world, display)
+	draw(universe, world, display)
 	{
 		display.clear();
 

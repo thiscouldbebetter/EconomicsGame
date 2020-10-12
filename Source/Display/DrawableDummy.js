@@ -1,5 +1,8 @@
 
-function DrawableDummy()
+class DrawableDummy
 {
-	this.pos = new Coords();
+	constructor()
+	{
+		this.pos = new Coords();
+	}
 }

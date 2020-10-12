@@ -1,27 +1,28 @@
 
-function Facility(defnName, posInCells)
+class Facility
 {
-	this.defnName = defnName;
-	this.posInCells = posInCells;
+	constructor(defnName, posInCells)
+	{
+		this.defnName = defnName;
+		this.posInCells = posInCells;
 
-	this.pos = new Coords();
-	var loc = new Location(this.pos);
-	this.locatable = new Locatable(loc);
+		this.pos = new Coords();
+		var loc = new Location(this.pos);
+		this.locatable = new Locatable(loc);
 
-	this.agentAssigned = null;
+		this.agentAssigned = null;
 
-	this.resourceHolder = new ResourceHolder();
-}
+		this.resourceHolder = new ResourceHolder();
+	}
 
-{
-	Facility.prototype.defn = function(world)
+	defn(world)
 	{
 		return world.facilityDefns[this.defnName];
 	}
 
 	// entity
 
-	Facility.prototype.initialize = function(world, level)
+	initialize(world, level)
 	{
 		this.pos.overwriteWith
 		(
@@ -41,26 +42,26 @@ function Facility(defnName, posInCells)
 		}
 	}
 
-	Facility.prototype.updateForTimerTick = function(world, level)
+	updateForTimerTick(world, level)
 	{
 		// todo
 	}
 
 	// agents
 
-	Facility.prototype.agentDirect = function(world, level, agent)
+	agentDirect(world, level, agent)
 	{
 		this.defn(world).agentDirect(world, level, agent, this);
 	}
 
-	Facility.prototype.interactWith = function(world, level, agent)
+	interactWith(world, level, agent)
 	{
 		this.defn(world).interactWith(world, level, agent, this);
 	}
 
 	// drawable
 
-	Facility.prototype.draw = function(universe, world, display, level)
+	draw(universe, world, display, level)
 	{
 		var defn = this.defn(world);
 		var visual = defn.visual;
@@ -69,7 +70,7 @@ function Facility(defnName, posInCells)
 
 	// strings
 
-	Facility.prototype.toString = function()
+	toString()
 	{
 		var newline = "\n";
 

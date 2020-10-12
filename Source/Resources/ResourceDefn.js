@@ -1,6 +1,9 @@
 
-function ResourceDefn(name, visual)
+class ResourceDefn
 {
-	this.name = name;
-	this.visual = visual;
+	constructor(name, visual)
+	{
+		this.name = name;
+		this.visual = visual;
+	}
 }

@@ -1,7 +1,10 @@
 
-function Owner(name)
+class Owner
 {
-	this.name = name;
+	constructor(name)
+	{
+		this.name = name;
 
-	this.resourceHolder = new ResourceHolder();
+		this.resourceHolder = new ResourceHolder();
+	}
 }

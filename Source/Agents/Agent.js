@@ -1,24 +1,25 @@
 
-function Agent(name, defnName, posInCells)
+class Agent
 {
-	this.name = name;
-	this.defnName = defnName;
-	this.posInCells = posInCells;
+	constructor(name, defnName, posInCells)
+	{
+		this.name = name;
+		this.defnName = defnName;
+		this.posInCells = posInCells;
 
-	this.pos = new Coords();
-	var loc = new Location(this.pos);
-	this.locatable = new Locatable(loc);
-	this.drawable = {};
+		this.pos = new Coords();
+		var loc = new Location(this.pos);
+		this.locatable = new Locatable(loc);
+		this.drawable = {};
 
-	this.resourceHolder = new ResourceHolder();
-	this.facilityHome = null;
-	this.facilityWork = null;
+		this.resourceHolder = new ResourceHolder();
+		this.facilityHome = null;
+		this.facilityWork = null;
 
-	this._displacementToGoal = new Coords();
-}
+		this._displacementToGoal = new Coords();
+	}
 
-{
-	Agent.prototype.approach = function
+	approach
 	(
 		world, level, entityGoal
 	)
@@ -85,14 +86,14 @@ function Agent(name, defnName, posInCells)
 		}
 
 		return isAtGoal;
-	};
+	}
 
-	Agent.prototype.defn = function(world)
+	defn(world)
 	{
 		return world.agentDefns[this.defnName];
-	};
+	}
 
-	Agent.prototype.initialize = function(world, level)
+	initialize(world, level)
 	{
 		this.pos.overwriteWith
 		(
@@ -104,9 +105,9 @@ function Agent(name, defnName, posInCells)
 		(
 			level.map.cellSizeInPixels
 		);
-	};
+	}
 
-	Agent.prototype.updateForTimerTick = function(world, level)
+	updateForTimerTick(world, level)
 	{
 		if (this.facilityHome == null)
 		{
@@ -165,9 +166,9 @@ function Agent(name, defnName, posInCells)
 		(
 			level.map.cellSizeInPixels
 		);
-	};
+	}
 
-	Agent.prototype.updateForTimerTick_FacilityChoose = function(level, findHome)
+	updateForTimerTick_FacilityChoose(level, findHome)
 	{
 		var returnValue = null;
 
@@ -189,19 +190,19 @@ function Agent(name, defnName, posInCells)
 		}
 
 		return returnValue;
-	};
+	}
 
 	// drawable
 
-	Agent.prototype.draw = function(universe, world, display, level)
+	draw(universe, world, display, level)
 	{
 		var visual = this.defn(world).visual;
 		visual.draw(universe, world, display, this);
-	};
+	}
 
 	// strings
 
-	Agent.prototype.toString = function()
+	toString()
 	{
 		var newline = "\n";
 
@@ -211,5 +212,5 @@ function Agent(name, defnName, posInCells)
 			+ this.resourceHolder.toString();
 
 		return returnValue;
-	};
+	}
 }

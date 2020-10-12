@@ -1,9 +1,12 @@
 
-function FacilityDefn(name, visual, resourcesToBuild, initialize, agentDirect)
+class FacilityDefn
 {
-	this.name = name;
-	this.visual = visual;
-	this.resourcesToBuild = resourcesToBuild;
-	this.initialize = initialize;
-	this.agentDirect = agentDirect;
+	constructor(name, visual, resourcesToBuild, initialize, agentDirect)
+	{
+		this.name = name;
+		this.visual = visual;
+		this.resourcesToBuild = resourcesToBuild;
+		this.initialize = initialize;
+		this.agentDirect = agentDirect;
+	}
 }

@@ -1,28 +1,27 @@
 
-function Resource(defnName, amount)
+class Resource
 {
-	this.defnName = defnName;
-	this.amount = amount;
-}
+	constructor(defnName, amount)
+	{
+		this.defnName = defnName;
+		this.amount = amount;
+	}
 
-{
-	Resource.prototype.defn = function(world)
+	defn(world)
 	{
 		return world.resourceDefns[this.defnName];
 	}
 
 	// cloneable
 
-	Resource.prototype.clone = function()
+	clone()
 	{
 		return new Resource(this.defnName, this.amount);
 	}
-}
 
-{
 	// strings
 
-	Resource.prototype.toString = function()
+	toString()
 	{
 		return this.defnName + ":" + this.amount;
 	}

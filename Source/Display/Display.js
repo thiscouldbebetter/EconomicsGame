@@ -1,25 +1,26 @@
 
-function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
+class Display
 {
-	this.sizeInPixels = sizeInPixels;
-	this.fontHeightInPixels = fontHeightInPixels;
-	this.colorFore = colorFore;
-	this.colorBack = colorBack;
+	constructor(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
+	{
+		this.sizeInPixels = sizeInPixels;
+		this.fontHeightInPixels = fontHeightInPixels;
+		this.colorFore = colorFore;
+		this.colorBack = colorBack;
 
-	// helper variables
+		// helper variables
 
-	this.drawPos = new Coords();
-	this.drawableDummy = new DrawableDummy();
-}
+		this.drawPos = new Coords();
+		this.drawableDummy = new DrawableDummy();
+	}
 
-{
 	// constants
 
-	Display.RadiansPerCycle = Math.PI * 2;
+	static RadiansPerCycle = Math.PI * 2;
 
 	// methods
 
-	Display.prototype.clear = function()
+	clear()
 	{
 		this.drawRectangle
 		(
@@ -28,7 +29,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 		);
 	}
 
-	Display.prototype.drawCircle = function(centerPos, radius, colorFill, colorBorder)
+	drawCircle(centerPos, radius, colorFill, colorBorder)
 	{
 		this.graphics.beginPath();
 		this.graphics.arc
@@ -51,7 +52,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 		}
 	}
 
-	Display.prototype.drawPath = function
+	drawPath
 	(
 		pos, vertices, isClosed, colorFill, colorBorder
 	)
@@ -89,7 +90,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 	}
 
 
-	Display.prototype.drawRectangle = function
+	drawRectangle
 	(
 		pos, size, colorFill, colorBorder
 	)
@@ -115,7 +116,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 		}
 	}
 
-	Display.prototype.drawText = function(textToDraw, color, pos)
+	drawText(textToDraw, color, pos)
 	{
 		this.graphics.fillStyle = color;
 
@@ -132,7 +133,7 @@ function Display(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
 		}
 	}
 
-	Display.prototype.initialize = function()
+	initialize()
 	{
 		this.canvas = document.createElement("canvas");
 		this.canvas.width = this.sizeInPixels.x;
