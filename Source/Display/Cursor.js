@@ -8,8 +8,8 @@ class Cursor
 		this.entityToPlace = null;
 
 		this.pos = new Coords();
-		var loc = new Location(this.pos);
-		this.locatable = new Locatable(loc);
+		var loc = new Disposition(this.pos);
+		this._locatable = new Locatable(loc);
 	}
 
 	activate(world, level)
@@ -55,6 +55,11 @@ class Cursor
 	cancel(world, level)
 	{
 		this.entitySelected = null;
+	}
+
+	locatable()
+	{
+		return this._locatable;
 	}
 
 	selectInDirection(world, level, direction)
@@ -125,7 +130,7 @@ class Cursor
 		(
 			this.sizeInPixels,
 			null, // colorFill
-			"Red" // colorBorder
+			Color.byName("Red") // colorBorder
 		);
 	}
 
@@ -149,13 +154,16 @@ class Cursor
 
 	draw(universe, world, display, level)
 	{
-		this.visual.draw(universe, world, display, this);
+		this.visual.draw(universe, world, null, this, display);
 
-		var textColor = "Gray";
+		var textColor = Color.byName("Gray");
 		var timeAsString = level.timeOfDay(world);
-		var visual = new VisualText("Time: " + timeAsString, textColor);
+		var visual = VisualText.fromTextAndColor
+		(
+			"Time: " + timeAsString, textColor
+		);
 		visual = new VisualAnchor(visual, new Coords(0, 0));
-		visual.draw(universe, world, level.paneStatus, this);
+		visual.draw(universe, world, null, this, level.paneStatus);
 
 		var selectionAsText = "[none]";
 
@@ -176,7 +184,8 @@ class Cursor
 			}
 		}
 
-		visual.child._text = "Selected:\n" + selectionAsText;
-		visual.draw(universe, world, level.paneSelection, this);
+		var selectedText = "Selected:\n" + selectionAsText;
+		visual.child._text.contextSet(selectedText);
+		visual.draw(universe, world, null, this, level.paneSelection);
 	}
 }

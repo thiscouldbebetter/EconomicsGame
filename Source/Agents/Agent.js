@@ -8,8 +8,8 @@ class Agent
 		this.posInCells = posInCells;
 
 		this.pos = new Coords();
-		var loc = new Location(this.pos);
-		this.locatable = new Locatable(loc);
+		var loc = new Disposition(this.pos);
+		this._locatable = new Locatable(loc);
 		this.drawable = {};
 
 		this.resourceHolder = new ResourceHolder();
@@ -17,6 +17,13 @@ class Agent
 		this.facilityWork = null;
 
 		this._displacementToGoal = new Coords();
+
+		this._animatable = new Animatable();
+	}
+
+	animatable()
+	{
+		return this._animatable;
 	}
 
 	approach
@@ -55,7 +62,7 @@ class Agent
 			path.calculate();
 
 			var directionToGoal;
-			var forward = this.locatable.loc.orientation.forward;
+			var forward = this.locatable().loc.orientation.forward;
 
 			if (path.nodes.length < 2)
 			{
@@ -105,6 +112,11 @@ class Agent
 		(
 			level.map.cellSizeInPixels
 		);
+	}
+
+	locatable()
+	{
+		return this._locatable;
 	}
 
 	updateForTimerTick(world, level)
@@ -197,7 +209,7 @@ class Agent
 	draw(universe, world, display, level)
 	{
 		var visual = this.defn(world).visual;
-		visual.draw(universe, world, display, this);
+		visual.draw(universe, world, null, this, display);
 	}
 
 	// strings

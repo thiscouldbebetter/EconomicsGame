@@ -7,8 +7,8 @@ class Facility
 		this.posInCells = posInCells;
 
 		this.pos = new Coords();
-		var loc = new Location(this.pos);
-		this.locatable = new Locatable(loc);
+		var loc = new Disposition(this.pos);
+		this._locatable = new Locatable(loc);
 
 		this.agentAssigned = null;
 
@@ -18,6 +18,11 @@ class Facility
 	defn(world)
 	{
 		return world.facilityDefns[this.defnName];
+	}
+
+	locatable()
+	{
+		return this._locatable;
 	}
 
 	// entity
@@ -65,7 +70,7 @@ class Facility
 	{
 		var defn = this.defn(world);
 		var visual = defn.visual;
-		visual.draw(universe, world, display, this);
+		visual.draw(universe, world, null, this, display);
 	}
 
 	// strings

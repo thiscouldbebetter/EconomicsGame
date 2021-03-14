@@ -19,8 +19,8 @@ class DemoData
 				new VisualRectangle
 				(
 					mapCellSizeInPixels,
-					"Green", // colorFill
-					"LightGray" // colorBorder
+					Color.byName("Green"), // colorFill
+					Color.byName("LightGray") // colorBorder
 				)
 			),
 			new MapTerrain
@@ -31,14 +31,14 @@ class DemoData
 				new VisualRectangle
 				(
 					mapCellSizeInPixels,
-					"LightGray", // colorFill
-					"White" // colorBorder
+					Color.byName("GrayLight"), // colorFill
+					Color.byName("White") // colorBorder
 				)
 
 			),
 		].addLookups(x => x.code);
 
-		var visualPathColor = "Tan";
+		var visualPathColor = Color.byName("Tan");
 		var visualPath = new VisualGroup
 		([
 			new VisualPath
@@ -72,7 +72,7 @@ class DemoData
 			),
 		];
 
-		var map = new Map
+		var map = new MapOfCells
 		(
 			mapSizeInPixels,
 			mapTerrains,
@@ -130,7 +130,7 @@ class DemoData
 				(
 					mapCellSizeInPixels,
 					null, // colorFill
-					"Red"
+					Color.byName("Red")
 				)
 			),
 
@@ -141,7 +141,7 @@ class DemoData
 				(
 					mapCellSizeInPixels,
 					null, // colorFill
-					"Orange"
+					Color.byName("Orange")
 				)
 			),
 
@@ -152,7 +152,7 @@ class DemoData
 				(
 					mapCellSizeInPixels,
 					null, // colorFill
-					"Yellow"
+					Color.byName("Yellow")
 				)
 			),
 
@@ -162,7 +162,7 @@ class DemoData
 
 		var facilityDefns = this.world_FacilityDefns(facilitySize)
 
-		var agentColor = "Gray";
+		var agentColor = Color.byName("Gray");
 		var agentRadius = facilitySize.x / 2;
 		var agentVisual =
 			//new VisualCircle(facilitySize.x / 2, agentColor, agentColor);
@@ -221,7 +221,9 @@ class DemoData
 
 	world_FacilityDefns(facilitySize)
 	{
-		var houseColor = "DarkGray";
+		var fontHeightInPixels = 10;
+
+		var houseColor = Color.byName("GrayDark");
 		var house = new FacilityDefn
 		(
 			"House",
@@ -241,7 +243,10 @@ class DemoData
 					1, // lineThickness
 					true, // isClosed
 				),
-				new VisualText("House", houseColor)
+				VisualText.fromTextAndColor
+				(
+					"House", houseColor
+				)
 			]),
 			// resourcesToBuild
 			[],
@@ -272,7 +277,7 @@ class DemoData
 			}
 		);
 
-		var farmColor = "LightBlue";
+		var farmColor = Color.byName("Blue");
 		var farm = new FacilityDefn
 		(
 			"Farm",
@@ -294,7 +299,10 @@ class DemoData
 					1, // lineThickness
 					true // isClosed
 				),
-				new VisualText("Farm", farmColor)
+				VisualText.fromTextAndColor
+				(
+					"Farm", farmColor
+				)
 			]),
 			// resourcesToBuild
 			[],
@@ -317,7 +325,7 @@ class DemoData
 			}
 		);
 
-		var marketplaceColor = "Orange";
+		var marketplaceColor = Color.byName("Orange");
 		var marketplace = new FacilityDefn
 		(
 			"Marketplace",
@@ -328,7 +336,10 @@ class DemoData
 					facilitySize,
 					null, marketplaceColor // colors
 				),
-				new VisualText("Marketplace", marketplaceColor)
+				VisualText.fromTextAndColor
+				(
+					"Marketplace", marketplaceColor
+				)
 			]),
 			// resourcesToBuild
 			[],

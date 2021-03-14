@@ -21,6 +21,9 @@ class World
 		this.agentDefns = agentDefns.addLookupsByName();
 		this.actions = actions.addLookupsByName();
 		this.level = level;
+
+		this.actionsByName = new Map(this.actions.map(x => [x.name, x]));
+		this.timerTicksSoFar = 0;
 	}
 
 	initialize()
@@ -31,5 +34,7 @@ class World
 	updateForTimerTick()
 	{
 		this.level.updateForTimerTick(this);
+
+		this.timerTicksSoFar++;
 	}
 }

@@ -1,5 +1,5 @@
 
-class Map
+class MapOfCells
 {
 	constructor
 	(
@@ -74,7 +74,7 @@ class Map
 
 		this.cellPos = new Coords();
 		this.drawPos = new Coords();
-		this._locatable = new Locatable(new Location(this.drawPos));
+		this._locatable = new Locatable(new Disposition(this.drawPos));
 	}
 
 	cellAtPosInCells(posInCells)

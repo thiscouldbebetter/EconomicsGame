@@ -1,6 +1,6 @@
 function main()
 {
-	var display = new Display
+	var display = new Display2D
 	(
 		[ new Coords(400, 300) ],
 		"sans-serif", // fontName

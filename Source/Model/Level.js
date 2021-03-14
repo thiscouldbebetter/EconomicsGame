@@ -13,15 +13,27 @@ class Level
 
 		this.actionToInputsMappings =
 		[
-			new ActionToInputsMapping("MoveDown", "ArrowDown"),
-			new ActionToInputsMapping("MoveLeft", "ArrowLeft"),
-			new ActionToInputsMapping("MoveRight", "ArrowRight"),
-			new ActionToInputsMapping("MoveUp", "ArrowUp"),
-			new ActionToInputsMapping("Activate", "Enter"),
-			new ActionToInputsMapping("Cancel", "Escape"),
-			new ActionToInputsMapping("SelectPrevious", "["),
-			new ActionToInputsMapping("SelectNext", "]"),
+			new ActionToInputsMapping("MoveDown", [ "ArrowDown" ] ),
+			new ActionToInputsMapping("MoveLeft", [ "ArrowLeft" ] ),
+			new ActionToInputsMapping("MoveRight", [ "ArrowRight"] ),
+			new ActionToInputsMapping("MoveUp", [ "ArrowUp" ] ),
+			new ActionToInputsMapping("Activate", [ "Enter" ] ),
+			new ActionToInputsMapping("Cancel", [ "Escape" ] ),
+			new ActionToInputsMapping("SelectPrevious", [ "[" ] ),
+			new ActionToInputsMapping("SelectNext", [ "]" ] ),
 		].addLookups(x => x.inputNames);
+
+		this.actionToInputsMappingsByInputName = new Map();
+
+		for (var i = 0; i < this.actionToInputsMappings.length; i++)
+		{
+			var mapping = this.actionToInputsMappings[i];
+			for (var j = 0; j < mapping.inputNames.length; j++)
+			{
+				var inputName = mapping.inputNames[j];
+				this.actionToInputsMappingsByInputName.set(inputName, mapping);
+			}
+		}
 	}
 
 	entitiesAtPos(world, posToCheck, listToAddTo)
@@ -169,10 +181,12 @@ class Level
 	updateForTimerTick_1_Input(world)
 	{
 		var inputHelper = Globals.Instance.inputHelper;
-		var mappings = this.actionToInputsMappings;
-		var actions = world.actions;
+		var mappingsByInputName = this.actionToInputsMappingsByInputName;
+		var actionsByName = world.actionsByName;
 
-		var actionsFromInput = inputHelper.actionsFromInput(actions, mappings);
+		var actionsFromInput =
+			inputHelper.actionsFromInput(actionsByName, mappingsByInputName);
+
 		for (var i = 0; i < actionsFromInput.length; i++)
 		{
 			var action = actionsFromInput[i];

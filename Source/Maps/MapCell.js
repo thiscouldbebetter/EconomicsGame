@@ -29,6 +29,11 @@ class MapCell
 		return emplacementDefn;
 	}
 
+	locatable()
+	{
+		return this._locatable;
+	}
+
 	terrain(map)
 	{
 		return map.terrains[this.terrainCode];
@@ -38,8 +43,8 @@ class MapCell
 
 	draw(universe, world, display, map)
 	{
-		this.locatable = map._locatable;
-		var drawPos = this.locatable.loc.pos;
+		this._locatable = map._locatable;
+		var drawPos = this._locatable.loc.pos;
 
 		drawPos.overwriteWith
 		(
@@ -53,14 +58,14 @@ class MapCell
 		);
 
 		var visual = this.terrain(map).visual;
-		visual.draw(universe, world, display, this);
+		visual.draw(universe, world, null, this, display);
 
 		var emplacement = this.emplacement(map);
 
 		if (emplacement != null)
 		{
 			visual = emplacement.visual;
-			visual.draw(universe, world, display, this);
+			visual.draw(universe, world, null, this, display);
 		}
 	}
 }
