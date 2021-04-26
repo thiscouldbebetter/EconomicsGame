@@ -9,7 +9,7 @@ class Resource
 
 	defn(world)
 	{
-		return world.resourceDefns[this.defnName];
+		return world.resourceDefnsByName.get(this.defnName);
 	}
 
 	// cloneable

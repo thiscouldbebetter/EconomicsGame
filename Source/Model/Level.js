@@ -6,7 +6,9 @@ class Level
 		this.name = name;
 		this.map = map;
 		this.owner = owner;
-		this.facilities = facilities.addLookupLists("defnName");
+		this.facilities = facilities;
+		this.facilitiesListsByDefnName =
+			ArrayHelper2.addLookupLists(this.facilities, "defnName");
 		this.agents = agents;
 
 		this.cursor = new Cursor(this.map.sizeInCells.clone().divideScalar(2));
@@ -21,7 +23,7 @@ class Level
 			new ActionToInputsMapping("Cancel", [ "Escape" ] ),
 			new ActionToInputsMapping("SelectPrevious", [ "[" ] ),
 			new ActionToInputsMapping("SelectNext", [ "]" ] ),
-		].addLookups(x => x.inputNames);
+		];
 
 		this.actionToInputsMappingsByInputName = new Map();
 

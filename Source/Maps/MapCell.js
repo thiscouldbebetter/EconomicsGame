@@ -24,7 +24,7 @@ class MapCell
 	emplacement(map)
 	{
 		var emplacementDefn =
-			map.emplacementDefns[this.emplacementCode];
+			map.emplacementDefnsByCode.get(this.emplacementCode);
 
 		return emplacementDefn;
 	}
@@ -36,7 +36,7 @@ class MapCell
 
 	terrain(map)
 	{
-		return map.terrains[this.terrainCode];
+		return map.terrainsByCode.get(this.terrainCode);
 	}
 
 	// drawable
@@ -57,7 +57,8 @@ class MapCell
 			map.cellSizeInPixels
 		);
 
-		var visual = this.terrain(map).visual;
+		var terrain = this.terrain(map);
+		var visual = terrain.visual;
 		visual.draw(universe, world, null, this, display);
 
 		var emplacement = this.emplacement(map);

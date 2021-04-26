@@ -17,7 +17,7 @@ class Facility
 
 	defn(world)
 	{
-		return world.facilityDefns[this.defnName];
+		return world.facilityDefnsByName.get(this.defnName);
 	}
 
 	locatable()
@@ -40,7 +40,8 @@ class Facility
 			level.map.cellSizeInPixels
 		);
 
-		var defnInitialize = this.defn(world).initialize;
+		var defn = this.defn(world);
+		var defnInitialize = defn.initialize;
 		if (defnInitialize != null)
 		{
 			defnInitialize(world, level, this);

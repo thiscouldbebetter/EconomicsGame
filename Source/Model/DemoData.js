@@ -36,7 +36,9 @@ class DemoData
 				)
 
 			),
-		].addLookups(x => x.code);
+		];
+		var mapTerrainsByCode =
+			ArrayHelper.addLookups(mapTerrains, x => x.code);
 
 		var visualPathColor = Color.byName("Tan");
 		var visualPath = new VisualGroup
@@ -156,7 +158,8 @@ class DemoData
 				)
 			),
 
-		].addLookupsByName();
+		];
+		var resourceDefnsByName = ArrayHelper.addLookupsByName(resourceDefns);
 
 		var facilitySize = mapCellSizeInPixels.clone().multiplyScalar(.6);
 
@@ -180,11 +183,12 @@ class DemoData
 				0, // wealthInitial
 				// resourcesWeighted
 				[
-					new Resource(resourceDefns["ResourceDefn0"].name, .1),
-					new Resource(resourceDefns["ResourceDefn1"].name, .2),
+					new Resource(resourceDefnsByName.get("ResourceDefn0").name, .1),
+					new Resource(resourceDefnsByName.get("ResourceDefn1").name, .2),
 				]
 			)
-		].addLookupsByName();
+		];
+		var agentDefnsByName = ArrayHelper.addLookupsByName(agentDefns);
 
 		var actions = Action.Instances()._All;
 
@@ -368,7 +372,7 @@ class DemoData
 			house,
 			farm,
 			marketplace,
-		].addLookupsByName();
+		];
 
 		return facilityDefns;
 	}

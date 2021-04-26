@@ -27,7 +27,7 @@ class PathAgent
 			}
 			else
 			{
-				nodesToConsider.removeAt(0);
+				ArrayHelper.removeAt(nodesToConsider, 0);
 				var nodeToConsiderID = nodeToConsider.id(this.map.sizeInCells);
 				nodesAlreadyConsidered[nodeToConsiderID] = nodeToConsider;
 
@@ -95,8 +95,9 @@ class PathAgent
 
 			if (hasNodeNeighborNotYetBeenSeen == true)
 			{
-				nodesToConsider.insertElementSortedByKeyName
+				ArrayHelper2.insertElementSortedByKeyName
 				(
+					nodesToConsider,
 					nodeNeighbor,
 					"costToGoalEstimated"
 				);
@@ -114,7 +115,7 @@ class PathAgent
 
 		while (nodeCurrent != null)
 		{
-			returnValues.insertElementAt(nodeCurrent, 0);
+			ArrayHelper.insertElementAt(returnValues, nodeCurrent, 0);
 			nodeCurrent = nodeCurrent.prev;
 		}
 

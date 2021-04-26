@@ -4,6 +4,7 @@ class ResourceHolder
 	constructor()
 	{
 		this.resources = [];
+		this.resourcesByDefnName = new Map();
 	}
 
 	hasResources(resourcesToCheck)
@@ -13,7 +14,9 @@ class ResourceHolder
 		for (var i = 0; i < resourcesToCheck.length; i++)
 		{
 			var resourceToCheck = resourcesToCheck[i];
-			var resourceHeld = this.resources[resourceToCheck.defnName];
+			var resourceHeld =
+				this.resourcesByDefnName.get(resourceToCheck.defnName);
+
 			if
 			(
 				resourceHeld == null
@@ -30,20 +33,20 @@ class ResourceHolder
 	resourceAdd(resourceToAdd)
 	{
 		var resourceDefnName = resourceToAdd.defnName;
-		var resourceExisting = this.resources[resourceDefnName];
+		var resourceExisting = this.resourcesByDefnName.get(resourceDefnName);
 		if (resourceExisting == null)
 		{
 			resourceExisting = new Resource(resourceDefnName, 0);
 			this.resources.push(resourceExisting);
-			this.resources[resourceDefnName] = resourceExisting;
+			this.resourcesByDefnName.set(resourceDefnName, resourceExisting);
 		}
 
 		resourceExisting.amount += resourceToAdd.amount;
 
 		if (resourceExisting.amount <= 0)
 		{
-			this.resources.remove(resourceExisting);
-			delete this.resources[resourceDefnName];
+			ArrayHelper.remove(this.resources, resourceExisting);
+			this.resourcesByDefnName.delete(resourceDefnName);
 		}
 
 	}
@@ -53,7 +56,7 @@ class ResourceHolder
 		resourceToTransfer, other
 	)
 	{
-		if (this.hasResources(resourceToTransfer) == true)
+		if (this.hasResources(resourceToTransfer))
 		{
 			other.resourceAdd(resourceToTransfer);
 			resourceToTransfer.amount *= -1;

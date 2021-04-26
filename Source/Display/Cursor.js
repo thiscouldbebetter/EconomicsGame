@@ -64,7 +64,7 @@ class Cursor
 
 	selectInDirection(world, level, direction)
 	{
-		var facilityDefns = Globals.Instance.world.facilityDefns;
+		var facilityDefnsByName = Globals.Instance.world.facilityDefnsByName;
 
 		if (this.entityToPlace == null)
 		{
@@ -79,7 +79,7 @@ class Cursor
 		else
 		{
 			var facility = this.entityToPlace;
-			var facilityDefn = facilityDefns[facility.defnName];
+			var facilityDefn = facilityDefnsByName(facility.defnName);
 			var facilityDefnIndex = facilityDefns.indexOf(facilityDefn);
 			facilityDefnIndex = 
 			(

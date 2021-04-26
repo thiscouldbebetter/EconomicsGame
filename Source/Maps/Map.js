@@ -11,8 +11,12 @@ class MapOfCells
 	)
 	{
 		this.sizeInPixels = sizeInPixels;
-		this.terrains = terrains.addLookups(x => x.code);
-		this.emplacementDefns = emplacementDefns.addLookups(x => x.code);
+		this.terrains = terrains;
+		this.terrainsByCode =
+			ArrayHelper.addLookups(terrains, x => x.code);
+		this.emplacementDefns = emplacementDefns;
+		this.emplacementDefnsByCode =
+			ArrayHelper.addLookups(this.emplacementDefns, x => x.code);
 
 		this.sizeInCells = new Coords
 		(
@@ -70,6 +74,8 @@ class MapOfCells
 			new Coords(1, -1),
 		];
 
+		this.colorNight = Color.fromSystemColor("rgba(0, 0, 0, 0.5)");
+
 		// helper variables
 
 		this.cellPos = new Coords();
@@ -115,7 +121,7 @@ class MapOfCells
 			(
 				new Coords(0, 0), //pos,
 				display.size,
-				"rgba(0, 0, 0, .5)", // colorFill,
+				this.colorNight, // colorFill,
 				null // colorBorder
 			);
 		}

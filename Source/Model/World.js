@@ -15,14 +15,22 @@ class World
 	{
 		this.name = name;
 		this.dayNightCyclePeriodInSeconds = dayNightCyclePeriodInSeconds;
-		this.resourceDefns = resourceDefns.addLookupsByName();
-		this.mapEmplacementDefns = mapEmplacementDefns.addLookupsByName();
-		this.facilityDefns = facilityDefns.addLookupsByName();
-		this.agentDefns = agentDefns.addLookupsByName();
-		this.actions = actions.addLookupsByName();
+		this.resourceDefns = resourceDefns;
+		this.resourceDefnsByName =
+			ArrayHelper.addLookupsByName(this.resourceDefns);
+		this.mapEmplacementDefns = mapEmplacementDefns;
+		this.mapEmplacementDefnsByName =
+			ArrayHelper.addLookupsByName(this.mapEmplacementDefns);
+		this.facilityDefns = facilityDefns;
+		this.facilityDefnsByName =
+			ArrayHelper.addLookupsByName(this.facilityDefns);
+		this.agentDefns = agentDefns;
+		this.agentDefnsByName =
+			ArrayHelper.addLookupsByName(this.agentDefns);
+		this.actions = actions;
+		this.actionsByName = ArrayHelper.addLookupsByName(this.actions);
 		this.level = level;
 
-		this.actionsByName = new Map(this.actions.map(x => [x.name, x]));
 		this.timerTicksSoFar = 0;
 	}
 

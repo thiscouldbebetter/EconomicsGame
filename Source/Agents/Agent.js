@@ -18,7 +18,7 @@ class Agent
 
 		this._displacementToGoal = new Coords();
 
-		this._animatable = new Animatable();
+		this._animatable = new Animatable2();
 	}
 
 	animatable()
@@ -97,7 +97,7 @@ class Agent
 
 	defn(world)
 	{
-		return world.agentDefns[this.defnName];
+		return world.agentDefnsByName.get(this.defnName);
 	}
 
 	initialize(world, level)
@@ -154,7 +154,9 @@ class Agent
 
 			if (this.facilityHome != null)
 			{
-				var facilityMarketplace = level.facilities["Marketplace"][0];
+				var marketplaces =
+					level.facilitiesListsByDefnName.get("Marketplace");
+				var facilityMarketplace = marketplaces[0];
 				facilityMarketplace.agentDirect(world, level, this);
 			}
 		}
