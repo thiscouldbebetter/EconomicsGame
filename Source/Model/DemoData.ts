@@ -1,9 +1,9 @@
 
 class DemoData
 {
-	world(mapSizeInPixels)
+	world(mapSizeInPixels: Coords): World2
 	{
-		var mapSizeInCells = new Coords(16, 16);
+		var mapSizeInCells = new Coords(16, 16, 1);
 		var mapCellSizeInPixels = mapSizeInPixels.clone().divide
 		(
 			mapSizeInCells
@@ -20,7 +20,8 @@ class DemoData
 				(
 					mapCellSizeInPixels,
 					Color.byName("Green"), // colorFill
-					Color.byName("LightGray") // colorBorder
+					Color.byName("LightGray"), // colorBorder
+					null
 				)
 			),
 			new MapTerrain
@@ -32,13 +33,12 @@ class DemoData
 				(
 					mapCellSizeInPixels,
 					Color.byName("GrayLight"), // colorFill
-					Color.byName("White") // colorBorder
+					Color.byName("White"), // colorBorder
+					null
 				)
 
 			),
 		];
-		var mapTerrainsByCode =
-			ArrayHelper.addLookups(mapTerrains, x => x.code);
 
 		var visualPathColor = Color.byName("Tan");
 		var visualPath = new VisualGroup
@@ -47,19 +47,21 @@ class DemoData
 			(
 				new Path
 				([
-					new Coords(0, -.5).multiply(mapCellSizeInPixels),
-					new Coords(0, .5).multiply(mapCellSizeInPixels),
+					Coords.fromXY(0, -.5).multiply(mapCellSizeInPixels),
+					Coords.fromXY(0, .5).multiply(mapCellSizeInPixels),
 				]),
-				visualPathColor
+				visualPathColor,
+				null, null // ?
 			),
 			new VisualPath
 			(
 				new Path
 				([
-					new Coords(-.5, 0).multiply(mapCellSizeInPixels),
-					new Coords(.5, 0).multiply(mapCellSizeInPixels),
+					Coords.fromXY(-.5, 0).multiply(mapCellSizeInPixels),
+					Coords.fromXY(.5, 0).multiply(mapCellSizeInPixels),
 				]),
-				visualPathColor
+				visualPathColor,
+				null, null // ?
 			),
 		]);
 
@@ -132,7 +134,8 @@ class DemoData
 				(
 					mapCellSizeInPixels,
 					null, // colorFill
-					Color.byName("Red")
+					Color.byName("Red"),
+					null // ?
 				)
 			),
 
@@ -143,7 +146,8 @@ class DemoData
 				(
 					mapCellSizeInPixels,
 					null, // colorFill
-					Color.byName("Orange")
+					Color.byName("Orange"),
+					null // ?
 				)
 			),
 
@@ -154,12 +158,11 @@ class DemoData
 				(
 					mapCellSizeInPixels,
 					null, // colorFill
-					Color.byName("Yellow")
+					Color.byName("Yellow"),
+					null // ?
 				)
-			),
-
+			)
 		];
-		var resourceDefnsByName = ArrayHelper.addLookupsByName(resourceDefns);
 
 		var facilitySize = mapCellSizeInPixels.clone().multiplyScalar(.6);
 
@@ -171,7 +174,7 @@ class DemoData
 			//new VisualCircle(facilitySize.x / 2, agentColor, agentColor);
 			VisualBuilder.Instance().circleWithEyes
 			(
-				agentRadius, agentColor, agentRadius / 2
+				agentRadius, agentColor, agentRadius / 2, null
 			);
 
 		var agentDefns =
@@ -179,18 +182,11 @@ class DemoData
 			new AgentDefn
 			(
 				"AgentDefn0",
-				agentVisual,
-				0, // wealthInitial
-				// resourcesWeighted
-				[
-					new Resource(resourceDefnsByName.get("ResourceDefn0").name, .1),
-					new Resource(resourceDefnsByName.get("ResourceDefn1").name, .2),
-				]
+				agentVisual
 			)
 		];
-		var agentDefnsByName = ArrayHelper.addLookupsByName(agentDefns);
 
-		var actions = Action.Instances()._All;
+		var actions = Action2.Instances2()._All;
 
 		var level = new Level
 		(
@@ -199,16 +195,16 @@ class DemoData
 			new Owner("Owner0"),
 			// facilities
 			[
-				new Facility("House", new Coords(2, 2)),
-				new Facility("House", new Coords(12, 4)),
-				new Facility("Farm", new Coords(12, 12)),
-				new Facility("Marketplace", new Coords(4, 5)),
+				new Facility("House", Coords.fromXY(2, 2)),
+				new Facility("House", Coords.fromXY(12, 4)),
+				new Facility("Farm", Coords.fromXY(12, 12)),
+				new Facility("Marketplace", Coords.fromXY(4, 5)),
 			],
 			// agents
 			[]
 		);
 
-		var world = new World
+		var world = new World2
 		(
 			"World0",
 			60, // dayNightCyclePeriodInSeconds
@@ -223,10 +219,8 @@ class DemoData
 		return world;
 	}
 
-	world_FacilityDefns(facilitySize)
+	world_FacilityDefns(facilitySize: Coords): FacilityDefn[]
 	{
-		var fontHeightInPixels = 10;
-
 		var houseColor = Color.byName("GrayDark");
 		var house = new FacilityDefn
 		(
@@ -237,11 +231,11 @@ class DemoData
 				(
 					new Path
 					([
-						new Coords(0, -.5).multiply(facilitySize),
-						new Coords(.5, 0).multiply(facilitySize),
-						new Coords(.5, .5).multiply(facilitySize),
-						new Coords(-.5, .5).multiply(facilitySize),
-						new Coords(-.5, 0).multiply(facilitySize)
+						Coords.fromXY(0, -.5).multiply(facilitySize),
+						Coords.fromXY(.5, 0).multiply(facilitySize),
+						Coords.fromXY(.5, .5).multiply(facilitySize),
+						Coords.fromXY(-.5, .5).multiply(facilitySize),
+						Coords.fromXY(-.5, 0).multiply(facilitySize)
 					]),
 					houseColor,
 					1, // lineThickness
@@ -255,7 +249,7 @@ class DemoData
 			// resourcesToBuild
 			[],
 			// initialize
-			function(world, level, facility)
+			(world: World2, level: Level, facility: Facility) =>
 			{
 				var facilityPosInCells = facility.posInCells;
 				var agentName = "Agent" + level.facilities.indexOf(facility);
@@ -263,7 +257,7 @@ class DemoData
 				level.agents.push(agent);
 			},
 			// agentDirect
-			function(world, level, agent, facility)
+			(world: World2, level: Level, agent: Agent, facility: Facility) =>
 			{
 				var isAtGoal = agent.approach
 				(
@@ -278,7 +272,8 @@ class DemoData
 						facility.resourceHolder
 					);
 				}
-			}
+			},
+			null // interactWith
 		);
 
 		var farmColor = Color.byName("Blue");
@@ -291,13 +286,13 @@ class DemoData
 				(
 					new Path
 					([
-						new Coords(0, -.5).multiply(facilitySize),
-						new Coords(.25, -.45).multiply(facilitySize),
-						new Coords(.5, 0).multiply(facilitySize),
-						new Coords(.5, .5).multiply(facilitySize),
-						new Coords(-.5, .5).multiply(facilitySize),
-						new Coords(-.5, 0).multiply(facilitySize),
-						new Coords(-.25, -.45).multiply(facilitySize),
+						Coords.fromXY(0, -.5).multiply(facilitySize),
+						Coords.fromXY(.25, -.45).multiply(facilitySize),
+						Coords.fromXY(.5, 0).multiply(facilitySize),
+						Coords.fromXY(.5, .5).multiply(facilitySize),
+						Coords.fromXY(-.5, .5).multiply(facilitySize),
+						Coords.fromXY(-.5, 0).multiply(facilitySize),
+						Coords.fromXY(-.25, -.45).multiply(facilitySize),
 					]),
 					farmColor,
 					1, // lineThickness
@@ -312,7 +307,7 @@ class DemoData
 			[],
 			null, // initialize
 			// agentDirect
-			function(world, level, agent, facility)
+			(world: World2, level: Level, agent: Agent, facility: Facility) =>
 			{
 				var isAtGoal = agent.approach
 				(
@@ -326,7 +321,8 @@ class DemoData
 						new Resource("Food", 1)
 					);
 				}
-			}
+			},
+			null // interactWith
 		);
 
 		var marketplaceColor = Color.byName("Orange");
@@ -338,7 +334,8 @@ class DemoData
 				new VisualRectangle
 				(
 					facilitySize,
-					null, marketplaceColor // colors
+					null, marketplaceColor, // colors
+					null // ?
 				),
 				VisualText.fromTextAndColor
 				(
@@ -349,7 +346,7 @@ class DemoData
 			[],
 			null, // initialize
 			// agentDirect
-			function(world, level, agent, facility)
+			(world: World2, level: Level, agent: Agent, facility: Facility) =>
 			{
 				var isAtGoal = agent.approach
 				(
@@ -364,7 +361,8 @@ class DemoData
 						agent.resourceHolder
 					);
 				}
-			}
+			},
+			null // interactWith
 		);
 
 		var facilityDefns =

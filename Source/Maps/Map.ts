@@ -1,13 +1,32 @@
 
 class MapOfCells
 {
+	sizeInPixels: Coords;
+	terrains: MapTerrain[];
+	emplacementDefns: MapEmplacementDefn[];
+	cellTerrainsAsStrings: string[];
+	cellEmplacementsAsStrings: string[];
+
+	boundsInCellsMinusOnes: Box;
+	terrainsByCode: Map<string, MapTerrain>;
+	emplacementDefnsByCode: Map<string, MapEmplacementDefn>;
+	sizeInCells: Coords;
+	cellSizeInPixels: Coords;
+	cells: MapCell[];
+	neighborOffsets: Coords[];
+	colorNight: Color;
+
+	cellPos: Coords;
+	drawPos: Coords;
+	_locatable: Locatable;
+
 	constructor
 	(
-		sizeInPixels,
-		terrains,
-		emplacementDefns,
-		cellTerrainsAsStrings,
-		cellEmplacementsAsStrings
+		sizeInPixels: Coords,
+		terrains: MapTerrain[],
+		emplacementDefns: MapEmplacementDefn[],
+		cellTerrainsAsStrings: string[],
+		cellEmplacementsAsStrings: string[]
 	)
 	{
 		this.sizeInPixels = sizeInPixels;
@@ -18,13 +37,13 @@ class MapOfCells
 		this.emplacementDefnsByCode =
 			ArrayHelper.addLookups(this.emplacementDefns, x => x.code);
 
-		this.sizeInCells = new Coords
+		this.sizeInCells = Coords.fromXY
 		(
 			cellTerrainsAsStrings[0].length,
 			cellTerrainsAsStrings.length
 		);
 
-		this.boundsInCellsMinusOnes = new Box().fromMinAndMax
+		this.boundsInCellsMinusOnes = Box.create().fromMinAndMax
 		(
 			Coords.Instances().Zeroes,
 			this.sizeInCells.clone().subtract
@@ -39,7 +58,7 @@ class MapOfCells
 		);
 
 		this.cells = [];
-		var cellPos = new Coords();
+		var cellPos = Coords.create();
 		for (var y = 0; y < this.sizeInCells.y; y++)
 		{
 			cellPos.y = y;
@@ -63,42 +82,44 @@ class MapOfCells
 
 		this.neighborOffsets =
 		[
-			new Coords(1, 0),
-			new Coords(0, 1),
-			new Coords(-1, 0),
-			new Coords(0, -1),
+			Coords.fromXY(1, 0),
+			Coords.fromXY(0, 1),
+			Coords.fromXY(-1, 0),
+			Coords.fromXY(0, -1),
 
-			new Coords(1, 1),
-			new Coords(-1, 1),
-			new Coords(-1, -1),
-			new Coords(1, -1),
+			Coords.fromXY(1, 1),
+			Coords.fromXY(-1, 1),
+			Coords.fromXY(-1, -1),
+			Coords.fromXY(1, -1),
 		];
 
 		this.colorNight = Color.fromSystemColor("rgba(0, 0, 0, 0.5)");
 
 		// helper variables
 
-		this.cellPos = new Coords();
-		this.drawPos = new Coords();
-		this._locatable = new Locatable(new Disposition(this.drawPos));
+		this.cellPos = Coords.create();
+		this.drawPos = Coords.create();
+		this._locatable = new Locatable(Disposition.fromPos(this.drawPos));
 	}
 
-	cellAtPosInCells(posInCells)
+	cellAtPosInCells(posInCells: Coords): MapCell
 	{
 		return this.cells[this.indexOfCellAtPosInCells(posInCells)];
 	}
 
-	indexOfCellAtPosInCells(posInCells)
+	indexOfCellAtPosInCells(posInCells: Coords): number
 	{
 		return posInCells.y * this.sizeInCells.x + posInCells.x;
 	}
 
 	// drawable
 
-	draw(universe, world, display, level)
+	draw
+	(
+		universe: Universe, world: World2, display: Display, level: Level
+	): void
 	{
 		var cellPos = this.cellPos;
-		var drawPos = this.drawPos;
 
 		for (var y = 0; y < this.sizeInCells.y; y++)
 		{
@@ -114,15 +135,16 @@ class MapOfCells
 			}
 		}
 
-		var fractionOfDayNightCycleCompleted = level.fractionOfDayNightCycleCompleted(world);
+		var fractionOfDayNightCycleCompleted =
+			level.fractionOfDayNightCycleCompleted(world);
 		if (fractionOfDayNightCycleCompleted > .5)
 		{
 			display.drawRectangle
 			(
-				new Coords(0, 0), //pos,
-				display.size,
+				Coords.fromXY(0, 0), //pos,
+				display.sizeInPixels,
 				this.colorNight, // colorFill,
-				null // colorBorder
+				null, null // colorBorder, ?
 			);
 		}
 	}

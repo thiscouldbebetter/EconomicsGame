@@ -1,27 +1,30 @@
 
-class Resource
+class Resource //
 {
-	constructor(defnName, amount)
+	defnName: string;
+	amount: number;
+
+	constructor(defnName: string, amount: number)
 	{
 		this.defnName = defnName;
 		this.amount = amount;
 	}
 
-	defn(world)
+	defn(world: World2): ResourceDefn
 	{
 		return world.resourceDefnsByName.get(this.defnName);
 	}
 
 	// cloneable
 
-	clone()
+	clone(): Resource
 	{
 		return new Resource(this.defnName, this.amount);
 	}
 
 	// strings
 
-	toString()
+	toString(): string
 	{
 		return this.defnName + ":" + this.amount;
 	}

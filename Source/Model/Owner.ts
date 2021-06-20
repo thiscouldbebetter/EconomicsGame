@@ -1,7 +1,10 @@
 
 class Owner
 {
-	constructor(name)
+	name: string;
+	resourceHolder: ResourceHolder;
+
+	constructor(name: string)
 	{
 		this.name = name;
 

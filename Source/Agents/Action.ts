@@ -1,95 +1,113 @@
 
-class Action
+class Action2 extends Action
 {
-	constructor(name, perform)
+	perform2: (w: World2, l: Level, a: Actor2) => void;
+
+	constructor
+	(
+		name: string,
+		perform2: (w: World2, l: Level, a: Actor2) => void
+	)
 	{
-		this.name = name;
-		this.perform = perform;
+		super(name, null);
+		this.perform2 = perform2;
 	}
 
 	// instances
 
-	static Instances()
+	static _instances2: Action2_Instances;
+	static Instances2(): Action2_Instances
 	{
-		if (Action._instances == null)
+		if (Action2._instances2 == null)
 		{
-			Action._instances = new Action_Instances();
+			Action2._instances2 = new Action2_Instances();
 		}
-		return Action._instances;
+		return Action2._instances2;
 	}
 }
 
-class Action_Instances
+class Action2_Instances
 {
+	Activate: Action2;
+	Cancel: Action2;
+	MoveDown: Action2;
+	MoveLeft: Action2;
+	MoveRight: Action2;
+	MoveUp: Action2;
+	SelectNext: Action2;
+	SelectPrevious: Action2;
+
+	_All: Action2[];
+
 	constructor()
 	{
-		this.Activate = new Action
+		this.Activate = new Action2
 		(
 			"Activate",
-			function(world, level, actor)
+			(world: World2, level: Level, actor: Actor2) =>
 			{
-				level.cursor.activate(world, level);
+				level.cursor.activate(null, world, level);
 			}
 		);
 
-		this.Cancel = new Action
+		this.Cancel = new Action2
 		(
 			"Cancel",
-			function(world, level, actor)
+			(world: World2, level: Level, actor: Actor2) =>
 			{
 				level.cursor.cancel(world, level);
 			}
 		);
 
-		this.MoveDown = new Action
+		this.MoveDown = new Action2
 		(
 			"MoveDown",
-			function(world, level, actor)
+			(world: World2, level: Level, actor: Actor2) =>
 			{
-				level.cursor.moveInDirection(level, new Coords(0, 1));
+				level.cursor.moveInDirection(level, Coords.fromXY(0, 1));
 			}
 		);
 
-		this.MoveLeft = new Action
+		this.MoveLeft = new Action2
 		(
 			"MoveLeft",
-			function(world, level, actor)
+			(world: World2, level: Level, actor: Actor2) =>
 			{
-				level.cursor.moveInDirection(level, new Coords(-1, 0));
+				level.cursor.moveInDirection(level, Coords.fromXY(-1, 0));
 			}
 		);
 
-		this.MoveRight = new Action
+		this.MoveRight = new Action2
 		(
 			"MoveRight",
-			function(world, level, actor)
+			(world: World2, level: Level, actor: Actor2) =>
 			{
-				level.cursor.moveInDirection(level, new Coords(1, 0));
+				level.cursor.moveInDirection(level, Coords.fromXY(1, 0));
 			}
 		);
 
-		this.MoveUp = new Action
+		this.MoveUp = new Action2
 		(
 			"MoveUp",
-			function(world, level, actor)
+			(world: World2, level: Level, actor: Actor2) =>
 			{
-				level.cursor.moveInDirection(level, new Coords(0, -1));
+				level.cursor.moveInDirection(level, Coords.fromXY(0, -1));
 			}
 		);
 
-		this.SelectNext = new Action
+		this.SelectNext = new Action2
 		(
 			"SelectNext",
-			function(world, level, actor)
+			(world: World2, level: Level, actor: Actor2) =>
 			{
 				level.cursor.selectInDirection(world, level, 1);
 			}
 		);
 
-		this.SelectPrevious = new Action
+		this.SelectPrevious = new Action2
 		(
 			"SelectPrevious",
-			function(world, level, actor)
+			(world: World2, level: Level, actor: Actor2) =>
 			{
 				level.cursor.selectInDirection(world, level, -1);
 			}

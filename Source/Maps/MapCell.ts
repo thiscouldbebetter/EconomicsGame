@@ -1,14 +1,24 @@
 
-class MapCell
+class MapCell extends Entity2
 {
-	constructor(terrainCode, emplacementCode, posInCells)
+	terrainCode: string;
+	emplacementCode: string;
+	posInCells: Coords;
+
+	_locatable: Locatable;
+
+	constructor
+	(
+		terrainCode: string, emplacementCode: string, posInCells: Coords
+	)
 	{
+		super();
 		this.terrainCode = terrainCode;
 		this.emplacementCode = emplacementCode;
 		this.posInCells = posInCells;
 	}
 
-	costToTraverse(map)
+	costToTraverse(map: MapOfCells): number
 	{
 		var returnValue = this.terrain(map).costToTraverse;
 
@@ -21,7 +31,7 @@ class MapCell
 		return returnValue;
 	}
 
-	emplacement(map)
+	emplacement(map: MapOfCells): MapEmplacementDefn
 	{
 		var emplacementDefn =
 			map.emplacementDefnsByCode.get(this.emplacementCode);
@@ -29,19 +39,22 @@ class MapCell
 		return emplacementDefn;
 	}
 
-	locatable()
+	locatable(): Locatable
 	{
 		return this._locatable;
 	}
 
-	terrain(map)
+	terrain(map: MapOfCells): MapTerrain
 	{
 		return map.terrainsByCode.get(this.terrainCode);
 	}
 
 	// drawable
 
-	draw(universe, world, display, map)
+	draw
+	(
+		universe: Universe, world: World2, display: Display, map: MapOfCells
+	): void
 	{
 		this._locatable = map._locatable;
 		var drawPos = this._locatable.loc.pos;

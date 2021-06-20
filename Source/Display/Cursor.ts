@@ -1,36 +1,50 @@
 
-class Cursor
+class Cursor extends Entity2
 {
-	constructor(posInCells)
+	posInCells: Coords;
+	entitySelected: Entity2;
+	entityToPlace: Entity2;
+
+	pos: Coords;
+	_locatable: Locatable;
+	sizeInPixels: Coords;
+	visual: Visual;
+
+	constructor(posInCells: Coords)
 	{
+		super();
+
 		this.posInCells = posInCells;
 		this.entitySelected = null;
 		this.entityToPlace = null;
 
-		this.pos = new Coords();
-		var loc = new Disposition(this.pos);
+		this.pos = Coords.create();
+		var loc = Disposition.fromPos(this.pos);
 		this._locatable = new Locatable(loc);
 	}
 
-	activate(world, level)
+	activate(universe: Universe, world: World2, level: Level): void
 	{
 		if (this.entityToPlace != null)
 		{
-			var facility = this.entityToPlace;
-			var facilityDefn = facility.defn(world);
-			var owner = level.owner;
-			var canBuild = owner.resourceHolder.hasResources
-			(
-				facilityDefn.resourcesToBuild
-			);
-
-			if (canBuild)
+			var facility = this.entityToPlace as Facility;
+			if (facility != null)
 			{
-				facility.posInCells = this.posInCells.clone();
-				facility.initialize(world, level);
-				level.facilities.push(facility);
+				var facilityDefn = facility.defn(world);
+				var owner = level.owner;
+				var canBuild = owner.resourceHolder.hasResources
+				(
+					facilityDefn.resourcesToBuild
+				);
 
-				this.entityToPlace = null;
+				if (canBuild)
+				{
+					facility.posInCells = this.posInCells.clone();
+					facility.initialize(universe, world, level);
+					level.facilities.push(facility);
+
+					this.entityToPlace = null;
+				}
 			}
 		}
 		else
@@ -52,19 +66,20 @@ class Cursor
 		}
 	}
 
-	cancel(world, level)
+	cancel(world: World, level: Level): void
 	{
 		this.entitySelected = null;
 	}
 
-	locatable()
+	locatable(): Locatable
 	{
 		return this._locatable;
 	}
 
-	selectInDirection(world, level, direction)
+	selectInDirection(world: World2, level: Level, direction: number): void
 	{
-		var facilityDefnsByName = Globals.Instance.world.facilityDefnsByName;
+		var facilityDefns = world.facilityDefns;
+		var facilityDefnsByName = world.facilityDefnsByName;
 
 		if (this.entityToPlace == null)
 		{
@@ -78,24 +93,24 @@ class Cursor
 		}
 		else
 		{
-			var facility = this.entityToPlace;
-			var facilityDefn = facilityDefnsByName(facility.defnName);
-			var facilityDefnIndex = facilityDefns.indexOf(facilityDefn);
-			facilityDefnIndex = 
-			(
-				facilityDefnIndex + direction
-			).wrapToRangeMax
-			(
-				facilityDefns.length - 1
-			);
-			facility.defnName = facilityDefns[facilityDefnIndex].name;
+			var facility = this.entityToPlace as Facility;
+			if (facility != null)
+			{
+				var facilityDefn = facilityDefnsByName.get(facility.defnName);
+				var facilityDefnIndex = facilityDefns.indexOf(facilityDefn);
+				facilityDefnIndex = NumberHelper.wrapToRangeMax
+				(
+					facilityDefnIndex + direction,
+					facilityDefns.length - 1
+				);
+				facility.defnName = facilityDefns[facilityDefnIndex].name;
+			}
 		}
 
 		this.entitySelected = this.entityToPlace;
 	}
 
-
-	moveInDirection(level, direction)
+	moveInDirection(level: Level, direction: Coords)
 	{
 		this.posInCells.add
 		(
@@ -109,8 +124,10 @@ class Cursor
 
 	// entity
 
-	initialize(world, level)
+	initialize(universe: Universe, world: World, place: Place): Entity
 	{
+		var level = place as Level;
+
 		var mapCellSizeInPixels = level.map.cellSizeInPixels;
 
 		this.pos.overwriteWith
@@ -130,39 +147,53 @@ class Cursor
 		(
 			this.sizeInPixels,
 			null, // colorFill
-			Color.byName("Red") // colorBorder
+			Color.byName("Red"), // colorBorder
+			null // ?
 		);
+
+		return this;
 	}
 
-	updateForTimerTick(world, level)
+	updateForTimerTick
+	(
+		universe: Universe, world: World, place: Place
+	): Entity
 	{
+		var level = place as Level;
+
 		var mapCellSizeInPixels = level.map.cellSizeInPixels;
+		var halves = Coords.Instances().Halves;
 
 		this.pos.overwriteWith
 		(
 			this.posInCells
 		).add
 		(
-			Coords.Instances().Halves
+			halves
 		).multiply
 		(
-			level.map.cellSizeInPixels
+			mapCellSizeInPixels
 		);
+
+		return this;
 	}
 
 	// drawable
 
-	draw(universe, world, display, level)
+	draw
+	(
+		universe: Universe, world: World2, display: Display, level: Level
+	): void
 	{
 		this.visual.draw(universe, world, null, this, display);
 
 		var textColor = Color.byName("Gray");
 		var timeAsString = level.timeOfDay(world);
-		var visual = VisualText.fromTextAndColor
+		var visualText = VisualText.fromTextAndColor
 		(
 			"Time: " + timeAsString, textColor
 		);
-		visual = new VisualAnchor(visual, new Coords(0, 0));
+		var visual = new VisualAnchor(visualText, Coords.fromXY(0, 0), null);
 		visual.draw(universe, world, null, this, level.paneStatus);
 
 		var selectionAsText = "[none]";
@@ -173,7 +204,9 @@ class Cursor
 
 			if (this.entityToPlace != null)
 			{
-				this.entityToPlace.pos.overwriteWith
+				var entityToPlacePos =
+					this.entityToPlace.locatable().loc.pos;
+				entityToPlacePos.overwriteWith
 				(
 					this.pos
 				);
@@ -185,7 +218,7 @@ class Cursor
 		}
 
 		var selectedText = "Selected:\n" + selectionAsText;
-		visual.child._text.contextSet(selectedText);
+		visualText._text.contextSet(selectedText);
 		visual.draw(universe, world, null, this, level.paneSelection);
 	}
 }

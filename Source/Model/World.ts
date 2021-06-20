@@ -1,19 +1,43 @@
 
-class World
+class World2 extends World
 {
+	name: string;
+	dayNightCyclePeriodInSeconds: number;
+	resourceDefns: ResourceDefn[];
+	mapEmplacementDefns: MapEmplacementDefn[];
+	facilityDefns: FacilityDefn[];
+	agentDefns: AgentDefn[];
+	actions: Action2[];
+	level: Level;
+
+	resourceDefnsByName: Map<string, ResourceDefn>;
+	mapEmplacementDefnsByName: Map<string, MapEmplacementDefn>;
+	facilityDefnsByName: Map<string, FacilityDefn>;
+	agentDefnsByName: Map<string, AgentDefn>;
+	actionsByName: Map<string, Action2>;
+
+	timerTicksSoFar: number;
+
 	constructor
 	(
-		name,
-		dayNightCyclePeriodInSeconds,
-		resourceDefns,
-		mapEmplacementDefns,
-		facilityDefns,
-		agentDefns,
-		actions,
-		level
+		name: string,
+		dayNightCyclePeriodInSeconds: number,
+		resourceDefns: ResourceDefn[],
+		mapEmplacementDefns: MapEmplacementDefn[],
+		facilityDefns: FacilityDefn[],
+		agentDefns: AgentDefn[],
+		actions: Action2[],
+		level: Level
 	)
 	{
-		this.name = name;
+		super
+		(
+			name,
+			null, // timeCreated
+			null, // worldDefn
+			[] // places
+		);
+
 		this.dayNightCyclePeriodInSeconds = dayNightCyclePeriodInSeconds;
 		this.resourceDefns = resourceDefns;
 		this.resourceDefnsByName =
@@ -34,14 +58,14 @@ class World
 		this.timerTicksSoFar = 0;
 	}
 
-	initialize()
+	initialize2(universe: Universe): void
 	{
-		this.level.initialize(this);
+		this.level.initialize2(universe, this);
 	}
 
-	updateForTimerTick()
+	updateForTimerTick(universe: Universe): void
 	{
-		this.level.updateForTimerTick(this);
+		this.level.updateForTimerTick2(universe, this);
 
 		this.timerTicksSoFar++;
 	}

@@ -1,8 +1,10 @@
 
 class DrawableDummy
 {
+	pos: Coords;
+
 	constructor()
 	{
-		this.pos = new Coords();
+		this.pos = Coords.create();
 	}
 }

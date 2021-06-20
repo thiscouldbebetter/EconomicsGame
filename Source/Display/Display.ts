@@ -1,7 +1,24 @@
 
-class Display
+class Display2
 {
-	constructor(sizeInPixels, fontHeightInPixels, colorFore, colorBack)
+	sizeInPixels: Coords;
+	fontHeightInPixels: number;
+	colorFore: Color;
+	colorBack: Color;
+
+	drawPos: Coords;
+	drawableDummy: DrawableDummy;
+
+	canvas: any;
+	graphics: any;
+
+	constructor
+	(
+		sizeInPixels: Coords,
+		fontHeightInPixels: number,
+		colorFore: Color,
+		colorBack: Color
+	)
 	{
 		this.sizeInPixels = sizeInPixels;
 		this.fontHeightInPixels = fontHeightInPixels;
@@ -10,17 +27,17 @@ class Display
 
 		// helper variables
 
-		this.drawPos = new Coords();
+		this.drawPos = Coords.create();
 		this.drawableDummy = new DrawableDummy();
 	}
 
 	// constants
 
-	static RadiansPerCycle = Math.PI * 2;
+	static RadiansPerCycle: number = Math.PI * 2;
 
 	// methods
 
-	clear()
+	clear(): void
 	{
 		this.drawRectangle
 		(
@@ -29,14 +46,18 @@ class Display
 		);
 	}
 
-	drawCircle(centerPos, radius, colorFill, colorBorder)
+	drawCircle
+	(
+		centerPos: Coords, radius: number, colorFill: Color,
+		colorBorder: Color
+	): void
 	{
 		this.graphics.beginPath();
 		this.graphics.arc
 		(
 			centerPos.x, centerPos.y,
 			radius,
-			0, Display.RadiansPerCycle
+			0, Display2.RadiansPerCycle
 		);
 
 		if (colorFill != null)
@@ -54,8 +75,9 @@ class Display
 
 	drawPath
 	(
-		pos, vertices, isClosed, colorFill, colorBorder
-	)
+		pos: Coords, vertices: Coords[], isClosed: boolean,
+		colorFill: Color, colorBorder: Color
+	): void
 	{
 		this.graphics.beginPath();
 
@@ -92,8 +114,8 @@ class Display
 
 	drawRectangle
 	(
-		pos, size, colorFill, colorBorder
-	)
+		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
+	): void
 	{
 		if (colorFill != null)
 		{
@@ -116,7 +138,7 @@ class Display
 		}
 	}
 
-	drawText(textToDraw, color, pos)
+	drawText(textToDraw: string, color: Color, pos: Coords): void
 	{
 		this.graphics.fillStyle = color;
 
@@ -133,7 +155,7 @@ class Display
 		}
 	}
 
-	initialize()
+	initialize(): void
 	{
 		this.canvas = document.createElement("canvas");
 		this.canvas.width = this.sizeInPixels.x;

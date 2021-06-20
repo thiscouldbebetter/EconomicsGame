@@ -1,20 +1,30 @@
 
-function Globals()
+class Globals
 {
-	// do nothing
-}
+	timerTicksPerSecond: number;
+	display: Display2D;
+	world: World2;
+	inputHelper: InputHelper;
+	timer: any;
 
-{
 	// instance
 
-	Globals.Instance = new Globals();
+	static _instance: Globals;
+	static Instance(): Globals
+	{
+		if (Globals._instance == null)
+		{
+			Globals._instance = new Globals();
+		}
+		return Globals._instance;
+	}
 
 	// methods
 
-	Globals.prototype.initialize = function
+	initialize
 	(
-		timerTicksPerSecond, display, world
-	)
+		timerTicksPerSecond: number, display: Display2D, world: World2
+	): void
 	{
 		this.timerTicksPerSecond = timerTicksPerSecond;
 		this.display = display;
@@ -22,8 +32,8 @@ function Globals()
 
 		this.inputHelper = new InputHelper();
 
-		this.display.initialize();
-		this.world.initialize();
+		this.display.initialize(null);
+		this.world.initialize2(null);
 
 		var millisecondsPerTimerTick = Math.floor
 		(
@@ -36,13 +46,13 @@ function Globals()
 			millisecondsPerTimerTick
 		);
 
-		this.inputHelper.initialize();
+		this.inputHelper.initialize(null);
 	}
 
 	// events
 
-	Globals.prototype.handleEventTimerTick = function()
+	handleEventTimerTick(): void
 	{
-		this.world.updateForTimerTick();
+		this.world.updateForTimerTick(null);
 	}
 }

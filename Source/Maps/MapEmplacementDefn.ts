@@ -1,7 +1,18 @@
 
 class MapEmplacementDefn
 {
-	constructor(name, code, costToTraverseMultiplier, visual)
+	name: string;
+	code: string;
+	costToTraverseMultiplier: number;
+	visual: Visual;
+
+	constructor
+	(
+		name: string,
+		code: string,
+		costToTraverseMultiplier: number,
+		visual: Visual
+	)
 	{
 		this.name = name;
 		this.code = code;

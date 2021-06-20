@@ -1,9 +1,9 @@
 
 class ArrayHelper2
 {
-	static addLookupLists(array, keyName)
+	static addLookupLists(array: any[], keyName: string): Map<string, any[]>
 	{
-		var returnMap = new Map();
+		var returnMap = new Map<string, any[]>();
 
 		for (var i = 0; i < array.length; i++)
 		{
@@ -21,7 +21,10 @@ class ArrayHelper2
 		return returnMap;
 	}
 
-	static insertElementSortedByKeyName(array, elementToSort, keyName)
+	static insertElementSortedByKeyName
+	(
+		array: any[], elementToSort: any, keyName: string
+	): void
 	{
 		var keyValueToSort = elementToSort[keyName];
 

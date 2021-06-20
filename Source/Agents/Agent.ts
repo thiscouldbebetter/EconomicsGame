@@ -1,35 +1,49 @@
 
-class Agent
+class Agent extends Entity2 implements Actor2
 {
-	constructor(name, defnName, posInCells)
+	name: string;
+	defnName: string;
+	posInCells: Coords;
+
+	pos: Coords;
+	_locatable: Locatable;
+	drawable: any;
+
+	resourceHolder: ResourceHolder;
+	facilityHome: Facility;
+	facilityWork: Facility;
+
+	_displacementToGoal: Coords;
+	_animatable: Animatable2;
+
+	constructor(name: string, defnName: string, posInCells: Coords)
 	{
+		super();
+
 		this.name = name;
 		this.defnName = defnName;
 		this.posInCells = posInCells;
 
-		this.pos = new Coords();
-		var loc = new Disposition(this.pos);
+		this.pos = Coords.create();
+		var loc = Disposition.fromPos(this.pos);
 		this._locatable = new Locatable(loc);
-		this.drawable = {};
+		this.drawable = new DrawableDummy();
 
 		this.resourceHolder = new ResourceHolder();
 		this.facilityHome = null;
 		this.facilityWork = null;
 
-		this._displacementToGoal = new Coords();
+		this._displacementToGoal = Coords.create();
 
-		this._animatable = new Animatable2();
+		this._animatable = Animatable2.create();
 	}
 
-	animatable()
+	animatable(): Animatable2
 	{
 		return this._animatable;
 	}
 
-	approach
-	(
-		world, level, entityGoal
-	)
+	approach(world: World2, level: Level, entityGoal: Entity2): boolean
 	{
 		var isAtGoal = false;
 
@@ -95,13 +109,15 @@ class Agent
 		return isAtGoal;
 	}
 
-	defn(world)
+	defn(world: World2): AgentDefn
 	{
 		return world.agentDefnsByName.get(this.defnName);
 	}
 
-	initialize(world, level)
+	initialize(universe: Universe, world: World, place: Place): Entity
 	{
+		var level = place as Level;
+
 		this.pos.overwriteWith
 		(
 			this.posInCells
@@ -112,15 +128,23 @@ class Agent
 		(
 			level.map.cellSizeInPixels
 		);
+
+		return this;
 	}
 
-	locatable()
+	locatable(): Locatable
 	{
 		return this._locatable;
 	}
 
-	updateForTimerTick(world, level)
+	updateForTimerTick
+	(
+		universe: Universe, worldAsWorld: World, place: Place
+	): Entity
 	{
+		var world = worldAsWorld as World2;
+		var level = place as Level;
+
 		if (this.facilityHome == null)
 		{
 			this.facilityHome = this.updateForTimerTick_FacilityChoose
@@ -137,7 +161,8 @@ class Agent
 			);
 		}
 
-		var fractionOfDayNightCycleCompleted = level.fractionOfDayNightCycleCompleted(world);
+		var fractionOfDayNightCycleCompleted =
+			level.fractionOfDayNightCycleCompleted(world);
 
 		if (fractionOfDayNightCycleCompleted < .4)
 		{
@@ -180,9 +205,14 @@ class Agent
 		(
 			level.map.cellSizeInPixels
 		);
+
+		return this;
 	}
 
-	updateForTimerTick_FacilityChoose(level, findHome)
+	updateForTimerTick_FacilityChoose
+	(
+		level: Level, findHome: boolean
+	): Facility
 	{
 		var returnValue = null;
 
@@ -208,7 +238,11 @@ class Agent
 
 	// drawable
 
-	draw(universe, world, display, level)
+	draw
+	(
+		universe: Universe, world: World2, display: Display,
+		level: Level
+	): void
 	{
 		var visual = this.defn(world).visual;
 		visual.draw(universe, world, null, this, display);
@@ -216,7 +250,7 @@ class Agent
 
 	// strings
 
-	toString()
+	toString(): string
 	{
 		var newline = "\n";
 

@@ -1,9 +1,39 @@
 
-class Level
+class Level extends Place
 {
-	constructor(name, map, owner, facilities, agents)
+	name: string;
+	map: MapOfCells;
+	owner: Owner;
+	facilities: Facility[];
+	agents: Agent[];
+
+	facilitiesListsByDefnName: Map<string, Facility[]>;
+	cursor: Cursor;
+	actionToInputsMappings: ActionToInputsMapping[];
+	actionToInputsMappingsByInputName: Map<string, ActionToInputsMapping>;
+
+	paneMap: Pane;
+	paneSelection: Pane;
+	paneStatus: Pane;
+	ticksSinceStarted: number;
+
+	constructor
+	(
+		name: string,
+		map: MapOfCells,
+		owner: Owner,
+		facilities: Facility[],
+		agents: Agent[]
+	)
 	{
-		this.name = name;
+		super
+		(
+			name,
+			null, // defnName
+			map.sizeInPixels, // size
+			[] // entities
+		);
+
 		this.map = map;
 		this.owner = owner;
 		this.facilities = facilities;
@@ -13,19 +43,22 @@ class Level
 
 		this.cursor = new Cursor(this.map.sizeInCells.clone().divideScalar(2));
 
+		var inactivate = true;
+
 		this.actionToInputsMappings =
 		[
-			new ActionToInputsMapping("MoveDown", [ "ArrowDown" ] ),
-			new ActionToInputsMapping("MoveLeft", [ "ArrowLeft" ] ),
-			new ActionToInputsMapping("MoveRight", [ "ArrowRight"] ),
-			new ActionToInputsMapping("MoveUp", [ "ArrowUp" ] ),
-			new ActionToInputsMapping("Activate", [ "Enter" ] ),
-			new ActionToInputsMapping("Cancel", [ "Escape" ] ),
-			new ActionToInputsMapping("SelectPrevious", [ "[" ] ),
-			new ActionToInputsMapping("SelectNext", [ "]" ] ),
+			new ActionToInputsMapping("MoveDown", [ "ArrowDown" ], inactivate),
+			new ActionToInputsMapping("MoveLeft", [ "ArrowLeft" ], inactivate ),
+			new ActionToInputsMapping("MoveRight", [ "ArrowRight"], inactivate ),
+			new ActionToInputsMapping("MoveUp", [ "ArrowUp" ], inactivate ),
+			new ActionToInputsMapping("Activate", [ "Enter" ], inactivate ),
+			new ActionToInputsMapping("Cancel", [ "Escape" ], inactivate ),
+			new ActionToInputsMapping("SelectPrevious", [ "[" ], inactivate ),
+			new ActionToInputsMapping("SelectNext", [ "]" ], inactivate ),
 		];
 
-		this.actionToInputsMappingsByInputName = new Map();
+		this.actionToInputsMappingsByInputName
+			= new Map<string, ActionToInputsMapping>();
 
 		for (var i = 0; i < this.actionToInputsMappings.length; i++)
 		{
@@ -38,10 +71,11 @@ class Level
 		}
 	}
 
-	entitiesAtPos(world, posToCheck, listToAddTo)
+	entitiesAtPos
+	(
+		world: World2, posToCheck: Coords, listToAddTo: Entity2[]
+	): Entity2[]
 	{
-		var returnValue = null;
-
 		var posToCheckInCells = posToCheck.clone().divide
 		(
 			this.map.cellSizeInPixels
@@ -52,7 +86,7 @@ class Level
 			this.facilities, this.agents
 		];
 
-		var entityPosInCells = new Coords();
+		var entityPosInCells = Coords.create();
 
 		for (var s = 0; s < entitySets.length; s++)
 		{
@@ -66,7 +100,7 @@ class Level
 					entity.posInCells
 				).floor();
 
-				if (entityPosInCells.equals(posToCheckInCells) == true)
+				if (entityPosInCells.equals(posToCheckInCells) )
 				{
 					listToAddTo.push(entity);
 				}
@@ -76,7 +110,7 @@ class Level
 		return listToAddTo;
 	}
 
-	fractionOfDayNightCycleCompleted(world)
+	fractionOfDayNightCycleCompleted(world: World2): number
 	{
 		var secondsSinceSunrise =
 			this.secondsSinceStarted()
@@ -88,21 +122,21 @@ class Level
 		return returnValue;
 	}
 
-	initialize(world)
+	initialize2(universe: Universe, world: World2): void
 	{
 		for (var i = 0; i < this.facilities.length; i++)
 		{
 			var facility = this.facilities[i];
-			facility.initialize(world, this);
+			facility.initialize(universe, world, this);
 		}
 
 		for (var i = 0; i < this.agents.length; i++)
 		{
 			var agent = this.agents[i];
-			agent.initialize(world, this);
+			agent.initialize(universe, world, this);
 		}
 
-		this.cursor.initialize(world, this);
+		this.cursor.initialize(universe, world, this);
 
 		// hack
 		this.cursor.entitySelected = this.agents[0];
@@ -115,8 +149,8 @@ class Level
 
 		this.paneStatus = new Pane
 		(
-			new Coords(this.map.sizeInPixels.x, 0),
-			new Coords
+			Coords.fromXY(this.map.sizeInPixels.x, 0),
+			Coords.fromXY
 			(
 				this.map.sizeInPixels.x / 3,
 				this.map.sizeInPixels.y / 2
@@ -125,8 +159,8 @@ class Level
 
 		this.paneSelection = new Pane
 		(
-			new Coords(this.map.sizeInPixels.x, this.map.sizeInPixels.y / 2),
-			new Coords
+			Coords.fromXY(this.map.sizeInPixels.x, this.map.sizeInPixels.y / 2),
+			Coords.fromXY
 			(
 				this.map.sizeInPixels.x / 3,
 				this.map.sizeInPixels.y / 2
@@ -136,16 +170,16 @@ class Level
 		this.ticksSinceStarted = 0;
 	}
 
-	secondsSinceStarted()
+	secondsSinceStarted(): number
 	{
 		var secondsSinceStarted =
 			this.ticksSinceStarted
-			/ Globals.Instance.timerTicksPerSecond;
+			/ Globals.Instance().timerTicksPerSecond;
 
 		return secondsSinceStarted;
 	}
 
-	timeOfDay(world)
+	timeOfDay(world: World2): string
 	{
 		var timeAsFraction = this.fractionOfDayNightCycleCompleted(world);
 		var hoursPerDay = 24;
@@ -162,27 +196,30 @@ class Level
 		var minutesFullSinceSunrise = Math.floor(timeAsFraction * minutesPerDay);
 		var minutesSinceStartOfHour = minutesFullSinceSunrise % minutesPerHour;
 
-		var timeMinutes = ("" + minutesSinceStartOfHour).padStart(2, "0");
+		var timeMinutes = StringHelper.padStart
+		(
+			"" + minutesSinceStartOfHour, 2, "0"
+		);
 
 		var returnValue = timeHours + ":" + timeMinutes;
 
 		return returnValue;
 	}
 
-	updateForTimerTick(world)
+	updateForTimerTick2(universe: Universe, world: World2): void
 	{
-		this.draw(null, world, Globals.Instance.display);
+		this.draw(null, world, Globals.Instance().display);
 
-		this.updateForTimerTick_1_Input(world);
+		this.updateForTimerTick_1_Input(universe, world);
 
-		this.updateForTimerTick_2_Entities(world);
+		this.updateForTimerTick_2_Entities(universe, world);
 
 		this.ticksSinceStarted++;
 	}
 
-	updateForTimerTick_1_Input(world)
+	updateForTimerTick_1_Input(universe: Universe, world: World2): void
 	{
-		var inputHelper = Globals.Instance.inputHelper;
+		var inputHelper = Globals.Instance().inputHelper;
 		var mappingsByInputName = this.actionToInputsMappingsByInputName;
 		var actionsByName = world.actionsByName;
 
@@ -191,31 +228,31 @@ class Level
 
 		for (var i = 0; i < actionsFromInput.length; i++)
 		{
-			var action = actionsFromInput[i];
-			action.perform(world, this);
+			var action = actionsFromInput[i] as Action2;
+			action.perform2(world, this, null);
 		}
 	}
 
-	updateForTimerTick_2_Entities(world)
+	updateForTimerTick_2_Entities(universe: Universe, world: World2): void
 	{
 		for (var i = 0; i < this.facilities.length; i++)
 		{
 			var facility = this.facilities[i];
-			facility.updateForTimerTick(world, this);
+			facility.updateForTimerTick(universe, world, this);
 		}
 
 		for (var i = 0; i < this.agents.length; i++)
 		{
 			var agent = this.agents[i];
-			agent.updateForTimerTick(world, this);
+			agent.updateForTimerTick(universe, world, this);
 		}
 
-		this.cursor.updateForTimerTick(world, this);
+		this.cursor.updateForTimerTick(universe, world, this);
 	}
 
 	// drawable
 
-	draw(universe, world, display)
+	draw(universe: Universe, world: World2, display: Display): void
 	{
 		display.clear();
 

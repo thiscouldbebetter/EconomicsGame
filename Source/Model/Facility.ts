@@ -1,13 +1,23 @@
 
-class Facility
+class Facility extends Entity2 implements Actor2
 {
-	constructor(defnName, posInCells)
+	defnName: string;
+	posInCells: Coords;
+
+	pos: Coords;
+	_locatable: Locatable;
+	agentAssigned: Agent;
+	resourceHolder: ResourceHolder;
+
+	constructor(defnName: string, posInCells: Coords)
 	{
+		super();
+
 		this.defnName = defnName;
 		this.posInCells = posInCells;
 
-		this.pos = new Coords();
-		var loc = new Disposition(this.pos);
+		this.pos = Coords.create();
+		var loc = Disposition.fromPos(this.pos);
 		this._locatable = new Locatable(loc);
 
 		this.agentAssigned = null;
@@ -15,20 +25,23 @@ class Facility
 		this.resourceHolder = new ResourceHolder();
 	}
 
-	defn(world)
+	defn(world: World2): FacilityDefn
 	{
 		return world.facilityDefnsByName.get(this.defnName);
 	}
 
-	locatable()
+	locatable(): Locatable
 	{
 		return this._locatable;
 	}
 
 	// entity
 
-	initialize(world, level)
+	initialize(universe: Universe, worldAsWorld: World, place: Place): Entity
 	{
+		var world = worldAsWorld as World2;
+		var level = place as Level;
+
 		this.pos.overwriteWith
 		(
 			this.posInCells
@@ -46,28 +59,33 @@ class Facility
 		{
 			defnInitialize(world, level, this);
 		}
+
+		return this;
 	}
 
-	updateForTimerTick(world, level)
+	updateForTimerTick(universe: Universe, world: World, place: Place): Entity
 	{
-		// todo
+		return this;
 	}
 
 	// agents
 
-	agentDirect(world, level, agent)
+	agentDirect(world: World2, level: Level, agent: Agent): void
 	{
 		this.defn(world).agentDirect(world, level, agent, this);
 	}
 
-	interactWith(world, level, agent)
+	interactWith(world: World2, level: Level, agent: Agent): void
 	{
 		this.defn(world).interactWith(world, level, agent, this);
 	}
 
 	// drawable
 
-	draw(universe, world, display, level)
+	draw
+	(
+		universe: Universe, world: World2, display: Display, level: Level
+	): void
 	{
 		var defn = this.defn(world);
 		var visual = defn.visual;
@@ -76,7 +94,7 @@ class Facility
 
 	// strings
 
-	toString()
+	toString(): string
 	{
 		var newline = "\n";
 

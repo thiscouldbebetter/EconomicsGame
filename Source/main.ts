@@ -2,19 +2,20 @@ function main()
 {
 	var display = new Display2D
 	(
-		[ new Coords(400, 300) ],
+		[ Coords.fromXY(400, 300) ],
 		"sans-serif", // fontName
 		8, // fontHeightInPixels
-		"LightGray", // colorFore
-		"White" // colorBack
+		Color.byName("GrayLight"), // colorFore
+		Color.byName("White"), // colorBack
+		null
 	);
 
-	display.drawableDummy = {};
-	display.drawableDummy.pos = new Coords();
+	//display.drawableDummy = new DrawableDummy();
+	//display.drawableDummy.pos = Coords.create();
 
 	var mapSizeInPixels = display.sizeInPixels.clone().multiply
 	(
-		new Coords(.75, 1)
+		Coords.fromXY(.75, 1)
 	);
 
 	var world = new DemoData().world
@@ -22,7 +23,7 @@ function main()
 		mapSizeInPixels
 	);
 
-	Globals.Instance.initialize
+	Globals.Instance().initialize
 	(
 		10, // timerTicksPerSecond
 		display,

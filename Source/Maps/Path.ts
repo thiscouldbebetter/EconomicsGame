@@ -1,23 +1,32 @@
 
 class PathAgent
 {
-	constructor(map, startPos, goalPos)
+	map: MapOfCells;
+	startPos: Coords;
+	goalPos: Coords;
+
+	nodes: PathNode[];
+
+	constructor(map: MapOfCells, startPos: Coords, goalPos: Coords)
 	{
 		this.map = map;
 		this.startPos = startPos;
 		this.goalPos = goalPos;
+
+		this.nodes = [];
 	}
 
-	calculate()
+	calculate(): void
 	{
 		var nodesToConsider = this.calculate_1_InitializeListOfNodesToConsider();
-		var nodesAlreadyConsidered = [];
+		var nodesToConsiderById = new Map<string, PathNode>();
+		var nodesAlreadyConsidered = new Map<string, PathNode>();
 
 		while (nodesToConsider.length > 0)
 		{
 			var nodeToConsider = nodesToConsider[0];
 
-			if (nodeToConsider.cellPos.equals(this.goalPos) == true)
+			if (nodeToConsider.cellPos.equals(this.goalPos) )
 			{
 				this.nodes = this.calculate_3_BuildListOfNodesFromStartToGoal
 				(
@@ -29,23 +38,24 @@ class PathAgent
 			{
 				ArrayHelper.removeAt(nodesToConsider, 0);
 				var nodeToConsiderID = nodeToConsider.id(this.map.sizeInCells);
-				nodesAlreadyConsidered[nodeToConsiderID] = nodeToConsider;
+				nodesAlreadyConsidered.set(nodeToConsiderID, nodeToConsider);
 
 				this.calculate_2_AddNeighborsToListOfNodesToConsider
 				(
 					nodeToConsider,
 					nodesToConsider,
+					nodesToConsiderById,
 					nodesAlreadyConsidered
 				);
 			}
 		}
 	}
 
-	calculate_1_InitializeListOfNodesToConsider()
+	calculate_1_InitializeListOfNodesToConsider(): PathNode[]
 	{
 		var nodesToConsider = [];
 
-		var displacementFromStartToGoal = new Coords();
+		var displacementFromStartToGoal = Coords.create();
 
 		displacementFromStartToGoal.overwriteWith
 		(
@@ -73,10 +83,11 @@ class PathAgent
 
 	calculate_2_AddNeighborsToListOfNodesToConsider
 	(
-		nodeToFindNeighborsOf,
-		nodesToConsider,
-		nodesAlreadyConsidered
-	)
+		nodeToFindNeighborsOf: PathNode,
+		nodesToConsider: PathNode[],
+		nodesToConsiderById: Map<string, PathNode>,
+		nodesAlreadyConsidered: Map<string, PathNode>
+	): void
 	{
 		var mapSizeInCells = this.map.sizeInCells;
 
@@ -89,11 +100,11 @@ class PathAgent
 
 			var hasNodeNeighborNotYetBeenSeen =
 			(
-				nodesAlreadyConsidered[nodeNeighborID] == null
-				&& nodesToConsider[nodeNeighborID] == null
+				nodesAlreadyConsidered.has(nodeNeighborID)
+				&& nodesToConsiderById.has(nodeNeighborID)
 			);
 
-			if (hasNodeNeighborNotYetBeenSeen == true)
+			if (hasNodeNeighborNotYetBeenSeen)
 			{
 				ArrayHelper2.insertElementSortedByKeyName
 				(
@@ -102,14 +113,15 @@ class PathAgent
 					"costToGoalEstimated"
 				);
 
-				nodesToConsider[nodeNeighborID] = nodeNeighbor;
+				nodesToConsider.push(nodeNeighbor);
+				nodesToConsiderById.set(nodeNeighborID, nodeNeighbor);
 			}
 		}
 	}
 
-	calculate_3_BuildListOfNodesFromStartToGoal(nodeGoal)
+	calculate_3_BuildListOfNodesFromStartToGoal(nodeGoal: PathNode): PathNode[]
 	{
-		var returnValues = [];
+		var returnValues = new Array<PathNode>();
 
 		var nodeCurrent = nodeGoal;
 

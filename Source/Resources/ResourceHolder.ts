@@ -1,13 +1,16 @@
 
 class ResourceHolder
 {
+	resources: Resource[];
+	resourcesByDefnName: Map<string, Resource>;
+
 	constructor()
 	{
 		this.resources = [];
 		this.resourcesByDefnName = new Map();
 	}
 
-	hasResources(resourcesToCheck)
+	hasResources(resourcesToCheck: Resource[]): boolean
 	{
 		var returnValue = true;
 
@@ -30,7 +33,7 @@ class ResourceHolder
 		return returnValue;
 	}
 
-	resourceAdd(resourceToAdd)
+	resourceAdd(resourceToAdd: Resource): void
 	{
 		var resourceDefnName = resourceToAdd.defnName;
 		var resourceExisting = this.resourcesByDefnName.get(resourceDefnName);
@@ -53,10 +56,10 @@ class ResourceHolder
 
 	resourceTransferToOther
 	(
-		resourceToTransfer, other
-	)
+		resourceToTransfer: Resource, other: ResourceHolder
+	): void
 	{
-		if (this.hasResources(resourceToTransfer))
+		if (this.hasResources( [ resourceToTransfer ]) )
 		{
 			other.resourceAdd(resourceToTransfer);
 			resourceToTransfer.amount *= -1;
@@ -64,7 +67,7 @@ class ResourceHolder
 		}
 	}
 
-	resourcesAdd(resourcesToAdd)
+	resourcesAdd(resourcesToAdd: Resource[]): void
 	{
 		for (var i = 0; i < resourcesToAdd.length; i++)
 		{
@@ -75,12 +78,10 @@ class ResourceHolder
 
 	// strings
 
-	toString()
+	toString(): string
 	{
 		var returnValue = this.resources.toString().split(",").join("\n");
 
 		return returnValue;
 	}
-
-
 }

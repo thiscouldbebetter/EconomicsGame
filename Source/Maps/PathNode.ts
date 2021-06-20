@@ -1,7 +1,18 @@
 
 class PathNode
 {
-	constructor(cellPos, costFromStart, costToGoalEstimated, prev)
+	cellPos: Coords;
+	costFromStart: number;
+	costToGoalEstimated: number;
+	prev: PathNode;
+
+	constructor
+	(
+		cellPos: Coords,
+		costFromStart: number,
+		costToGoalEstimated: number,
+		prev: PathNode
+	)
 	{
 		this.cellPos = cellPos;
 		this.costFromStart = costFromStart;
@@ -9,7 +20,7 @@ class PathNode
 		this.prev = prev;
 	}
 
-	id(mapSizeInCells)
+	id(mapSizeInCells: Coords): string
 	{
 		var nodeToConsiderIndex =
 			this.cellPos.y
@@ -21,14 +32,14 @@ class PathNode
 		return returnValue;
 	}
 
-	neighbors(path)
+	neighbors(path: PathAgent): PathNode[]
 	{
 		var map = path.map;
 
 		var returnValues = [];
 		var mapBoundsInCellsMinusOnes = map.boundsInCellsMinusOnes;
-		var costToGoalTemp = new Coords();
-		var neighborPos = new Coords();
+		var costToGoalTemp = Coords.create();
+		var neighborPos = Coords.create();
 
 		var neighborOffsets = map.neighborOffsets;
 
