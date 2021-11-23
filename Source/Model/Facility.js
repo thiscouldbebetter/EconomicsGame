@@ -17,7 +17,9 @@ class Facility extends Entity2 {
         return this._locatable;
     }
     // entity
-    initialize(universe, worldAsWorld, place) {
+    initialize(uwpe) {
+        var worldAsWorld = uwpe.world;
+        var place = uwpe.place;
         var world = worldAsWorld;
         var level = place;
         this.pos.overwriteWith(this.posInCells).add(Coords.Instances().Halves).multiply(level.map.cellSizeInPixels);
@@ -28,7 +30,7 @@ class Facility extends Entity2 {
         }
         return this;
     }
-    updateForTimerTick(universe, world, place) {
+    updateForTimerTick(uwpe) {
         return this;
     }
     // agents
@@ -42,7 +44,8 @@ class Facility extends Entity2 {
     draw(universe, world, display, level) {
         var defn = this.defn(world);
         var visual = defn.visual;
-        visual.draw(universe, world, null, this, display);
+        var uwpe = new UniverseWorldPlaceEntities(universe, world, null, this, null);
+        visual.draw(uwpe, display);
     }
     // strings
     toString() {

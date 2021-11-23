@@ -1,5 +1,5 @@
 
-class MapCell extends Entity2
+class MapCell2 extends Entity2
 {
 	terrainCode: string;
 	emplacementCode: string;
@@ -18,7 +18,7 @@ class MapCell extends Entity2
 		this.posInCells = posInCells;
 	}
 
-	costToTraverse(map: MapOfCells): number
+	costToTraverse(map: MapOfCells2): number
 	{
 		var returnValue = this.terrain(map).costToTraverse;
 
@@ -31,7 +31,7 @@ class MapCell extends Entity2
 		return returnValue;
 	}
 
-	emplacement(map: MapOfCells): MapEmplacementDefn
+	emplacement(map: MapOfCells2): MapEmplacementDefn
 	{
 		var emplacementDefn =
 			map.emplacementDefnsByCode.get(this.emplacementCode);
@@ -44,7 +44,7 @@ class MapCell extends Entity2
 		return this._locatable;
 	}
 
-	terrain(map: MapOfCells): MapTerrain
+	terrain(map: MapOfCells2): MapTerrain
 	{
 		return map.terrainsByCode.get(this.terrainCode);
 	}
@@ -53,7 +53,7 @@ class MapCell extends Entity2
 
 	draw
 	(
-		universe: Universe, world: World2, display: Display, map: MapOfCells
+		universe: Universe, world: World2, display: Display, map: MapOfCells2
 	): void
 	{
 		this._locatable = map._locatable;
@@ -72,14 +72,18 @@ class MapCell extends Entity2
 
 		var terrain = this.terrain(map);
 		var visual = terrain.visual;
-		visual.draw(universe, world, null, this, display);
+		var uwpe = new UniverseWorldPlaceEntities
+		(
+			universe, world, null, this, null
+		);
+		visual.draw(uwpe, display);
 
 		var emplacement = this.emplacement(map);
 
 		if (emplacement != null)
 		{
 			visual = emplacement.visual;
-			visual.draw(universe, world, null, this, display);
+			visual.draw(uwpe, display);
 		}
 	}
 }

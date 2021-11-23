@@ -4,14 +4,14 @@ class MapTerrain
 	name: string;
 	code: string;
 	costToTraverse: number;
-	visual: Visual;
+	visual: VisualBase;
 
 	constructor
 	(
 		name: string,
 		code: string,
 		costToTraverse: number,
-		visual: Visual
+		visual: VisualBase
 	)
 	{
 		this.name = name;

@@ -76,7 +76,7 @@ class DemoData
 			),
 		];
 
-		var map = new MapOfCells
+		var map = new MapOfCells2
 		(
 			mapSizeInPixels,
 			mapTerrains,

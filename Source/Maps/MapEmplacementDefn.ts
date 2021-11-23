@@ -4,14 +4,14 @@ class MapEmplacementDefn
 	name: string;
 	code: string;
 	costToTraverseMultiplier: number;
-	visual: Visual;
+	visual: VisualBase;
 
 	constructor
 	(
 		name: string,
 		code: string,
 		costToTraverseMultiplier: number,
-		visual: Visual
+		visual: VisualBase
 	)
 	{
 		this.name = name;

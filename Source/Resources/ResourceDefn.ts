@@ -2,9 +2,9 @@
 class ResourceDefn
 {
 	name: string;
-	visual: Visual;
+	visual: VisualBase;
 
-	constructor(name: string, visual: Visual)
+	constructor(name: string, visual: VisualBase)
 	{
 		this.name = name;
 		this.visual = visual;

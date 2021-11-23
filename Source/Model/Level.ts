@@ -2,7 +2,7 @@
 class Level extends Place
 {
 	name: string;
-	map: MapOfCells;
+	map: MapOfCells2;
 	owner: Owner;
 	facilities: Facility[];
 	agents: Agent[];
@@ -20,7 +20,7 @@ class Level extends Place
 	constructor
 	(
 		name: string,
-		map: MapOfCells,
+		map: MapOfCells2,
 		owner: Owner,
 		facilities: Facility[],
 		agents: Agent[]
@@ -124,19 +124,24 @@ class Level extends Place
 
 	initialize2(universe: Universe, world: World2): void
 	{
+		var uwpe = new UniverseWorldPlaceEntities
+		(
+			universe, world, this, null, null
+		);
+
 		for (var i = 0; i < this.facilities.length; i++)
 		{
 			var facility = this.facilities[i];
-			facility.initialize(universe, world, this);
+			facility.initialize(uwpe);
 		}
 
 		for (var i = 0; i < this.agents.length; i++)
 		{
 			var agent = this.agents[i];
-			agent.initialize(universe, world, this);
+			agent.initialize(uwpe);
 		}
 
-		this.cursor.initialize(universe, world, this);
+		this.cursor.initialize(uwpe);
 
 		// hack
 		this.cursor.entitySelected = this.agents[0];
@@ -235,19 +240,21 @@ class Level extends Place
 
 	updateForTimerTick_2_Entities(universe: Universe, world: World2): void
 	{
+		var uwpe = new UniverseWorldPlaceEntities(universe, world, this, null, null);
+
 		for (var i = 0; i < this.facilities.length; i++)
 		{
 			var facility = this.facilities[i];
-			facility.updateForTimerTick(universe, world, this);
+			facility.updateForTimerTick(uwpe);
 		}
 
 		for (var i = 0; i < this.agents.length; i++)
 		{
 			var agent = this.agents[i];
-			agent.updateForTimerTick(universe, world, this);
+			agent.updateForTimerTick(uwpe);
 		}
 
-		this.cursor.updateForTimerTick(universe, world, this);
+		this.cursor.updateForTimerTick(uwpe);
 	}
 
 	// drawable

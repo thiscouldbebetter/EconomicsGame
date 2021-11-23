@@ -64,7 +64,7 @@ class Pane implements Display
 		display.drawRectangle
 		(
 			drawPos, size,
-			colorFill, colorBorder, null // ?
+			colorFill, colorBorder // ?
 		);
 	}
 
@@ -80,7 +80,7 @@ class Pane implements Display
 		display.drawText
 		(
 			textToDraw, fontHeightInPixels, drawPos, color,
-			null, null, null, null // ?
+			null, null, null // ?
 		);
 	}
 
@@ -103,10 +103,17 @@ class Pane implements Display
 	drawBackground(colorBack: Color, colorBorder: Color): void {}
 	drawCircleWithGradient
 	(
-		center: Coords, radius: number, gradientFill: ValueBreakGroup,
+		center: Coords,
+		radius: number,
+		gradientFill: ValueBreakGroup<Color>,
 		colorBorder: Color
 	): void {}
-	drawCrosshairs(center: Coords, radius: number, color: Color): void {}
+	drawCrosshairs
+	(
+		center: Coords, numberOfLines: number,
+		radiusOuter: number, radiusInner: number,
+		color: Color, lineThickness: number
+	): void {}
 	drawEllipse
 	(
 		center: Coords, semimajorAxis: number, semiminorAxis: number,
@@ -126,6 +133,12 @@ class Pane implements Display
 	drawMeshWithOrientation(mesh: MeshTextured, meshOrientation: Orientation): void {}
 	drawPixel(pos: Coords, color: Color): void {}
 	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color): void {}
+	drawRectangleWithRoundedCorners
+	(
+		pos: Coords, size: Coords,
+		colorFill: Color, colorBorder: Color,
+		cornerRadius: number
+	): void {}
 	drawRectangleCentered
 	(
 		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color

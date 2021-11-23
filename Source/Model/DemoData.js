@@ -30,7 +30,7 @@ class DemoData {
             new MapEmplacementDefn("Path", "x", .2, // costToTraverseMultiplier
             visualPath),
         ];
-        var map = new MapOfCells(mapSizeInPixels, mapTerrains, mapEmplacementDefns, 
+        var map = new MapOfCells2(mapSizeInPixels, mapTerrains, mapEmplacementDefns, 
         // cellTerrainsAsStrings
         [
             "xxxxxxxxxxxxxxxx",

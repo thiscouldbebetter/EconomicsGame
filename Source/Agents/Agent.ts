@@ -114,8 +114,10 @@ class Agent extends Entity2 implements Actor2
 		return world.agentDefnsByName.get(this.defnName);
 	}
 
-	initialize(universe: Universe, world: World, place: Place): Entity
+	initialize(uwpe: UniverseWorldPlaceEntities): Entity
 	{
+		var place = uwpe.place;
+
 		var level = place as Level;
 
 		this.pos.overwriteWith
@@ -139,9 +141,12 @@ class Agent extends Entity2 implements Actor2
 
 	updateForTimerTick
 	(
-		universe: Universe, worldAsWorld: World, place: Place
+		uwpe: UniverseWorldPlaceEntities
 	): Entity
 	{
+		var worldAsWorld = uwpe.world;
+		var place = uwpe.place;
+
 		var world = worldAsWorld as World2;
 		var level = place as Level;
 
@@ -245,7 +250,11 @@ class Agent extends Entity2 implements Actor2
 	): void
 	{
 		var visual = this.defn(world).visual;
-		visual.draw(universe, world, null, this, display);
+		var uwpe = new UniverseWorldPlaceEntities
+		(
+			universe, world, null, this, null
+		);
+		visual.draw(uwpe, display);
 	}
 
 	// strings

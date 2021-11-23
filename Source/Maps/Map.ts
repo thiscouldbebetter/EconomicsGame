@@ -1,5 +1,5 @@
 
-class MapOfCells
+class MapOfCells2
 {
 	sizeInPixels: Coords;
 	terrains: MapTerrain[];
@@ -12,7 +12,7 @@ class MapOfCells
 	emplacementDefnsByCode: Map<string, MapEmplacementDefn>;
 	sizeInCells: Coords;
 	cellSizeInPixels: Coords;
-	cells: MapCell[];
+	cells: MapCell2[];
 	neighborOffsets: Coords[];
 	colorNight: Color;
 
@@ -69,7 +69,7 @@ class MapOfCells
 				var cellTerrainCode = cellTerrainsAsStrings[y][x];
 				var emplacementCode = cellEmplacementsAsStrings[y][x];
 
-				var cell = new MapCell
+				var cell = new MapCell2
 				(
 					cellTerrainCode,
 					emplacementCode,
@@ -102,7 +102,7 @@ class MapOfCells
 		this._locatable = new Locatable(Disposition.fromPos(this.drawPos));
 	}
 
-	cellAtPosInCells(posInCells: Coords): MapCell
+	cellAtPosInCells(posInCells: Coords): MapCell2
 	{
 		return this.cells[this.indexOfCellAtPosInCells(posInCells)];
 	}
@@ -144,7 +144,7 @@ class MapOfCells
 				Coords.fromXY(0, 0), //pos,
 				display.sizeInPixels,
 				this.colorNight, // colorFill,
-				null, null // colorBorder, ?
+				null // colorBorder
 			);
 		}
 	}

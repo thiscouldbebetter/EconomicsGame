@@ -37,8 +37,11 @@ class Facility extends Entity2 implements Actor2
 
 	// entity
 
-	initialize(universe: Universe, worldAsWorld: World, place: Place): Entity
+	initialize(uwpe: UniverseWorldPlaceEntities): Entity
 	{
+		var worldAsWorld = uwpe.world;
+		var place = uwpe.place;
+
 		var world = worldAsWorld as World2;
 		var level = place as Level;
 
@@ -63,7 +66,7 @@ class Facility extends Entity2 implements Actor2
 		return this;
 	}
 
-	updateForTimerTick(universe: Universe, world: World, place: Place): Entity
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): Entity
 	{
 		return this;
 	}
@@ -89,7 +92,11 @@ class Facility extends Entity2 implements Actor2
 	{
 		var defn = this.defn(world);
 		var visual = defn.visual;
-		visual.draw(universe, world, null, this, display);
+		var uwpe = new UniverseWorldPlaceEntities
+		(
+			universe, world, null, this, null
+		);
+		visual.draw(uwpe, display);
 	}
 
 	// strings

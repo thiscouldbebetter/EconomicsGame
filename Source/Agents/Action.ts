@@ -55,7 +55,10 @@ class Action2_Instances
 			"Cancel",
 			(world: World2, level: Level, actor: Actor2) =>
 			{
-				level.cursor.cancel(world, level);
+				level.cursor.cancel
+				(
+					world, level
+				);
 			}
 		);
 

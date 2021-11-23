@@ -1,5 +1,5 @@
 "use strict";
-class MapOfCells {
+class MapOfCells2 {
     constructor(sizeInPixels, terrains, emplacementDefns, cellTerrainsAsStrings, cellEmplacementsAsStrings) {
         this.sizeInPixels = sizeInPixels;
         this.terrains = terrains;
@@ -19,7 +19,7 @@ class MapOfCells {
                 cellPos.x = x;
                 var cellTerrainCode = cellTerrainsAsStrings[y][x];
                 var emplacementCode = cellEmplacementsAsStrings[y][x];
-                var cell = new MapCell(cellTerrainCode, emplacementCode, cellPos.clone());
+                var cell = new MapCell2(cellTerrainCode, emplacementCode, cellPos.clone());
                 this.cells.push(cell);
             }
         }
@@ -61,7 +61,7 @@ class MapOfCells {
         if (fractionOfDayNightCycleCompleted > .5) {
             display.drawRectangle(Coords.fromXY(0, 0), //pos,
             display.sizeInPixels, this.colorNight, // colorFill,
-            null, null // colorBorder, ?
+            null // colorBorder
             );
         }
     }

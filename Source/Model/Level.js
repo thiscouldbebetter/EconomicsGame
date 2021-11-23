@@ -59,15 +59,16 @@ class Level extends Place {
         return returnValue;
     }
     initialize2(universe, world) {
+        var uwpe = new UniverseWorldPlaceEntities(universe, world, this, null, null);
         for (var i = 0; i < this.facilities.length; i++) {
             var facility = this.facilities[i];
-            facility.initialize(universe, world, this);
+            facility.initialize(uwpe);
         }
         for (var i = 0; i < this.agents.length; i++) {
             var agent = this.agents[i];
-            agent.initialize(universe, world, this);
+            agent.initialize(uwpe);
         }
-        this.cursor.initialize(universe, world, this);
+        this.cursor.initialize(uwpe);
         // hack
         this.cursor.entitySelected = this.agents[0];
         this.paneMap = new Pane(Coords.Instances().Zeroes, this.map.sizeInPixels);
@@ -113,15 +114,16 @@ class Level extends Place {
         }
     }
     updateForTimerTick_2_Entities(universe, world) {
+        var uwpe = new UniverseWorldPlaceEntities(universe, world, this, null, null);
         for (var i = 0; i < this.facilities.length; i++) {
             var facility = this.facilities[i];
-            facility.updateForTimerTick(universe, world, this);
+            facility.updateForTimerTick(uwpe);
         }
         for (var i = 0; i < this.agents.length; i++) {
             var agent = this.agents[i];
-            agent.updateForTimerTick(universe, world, this);
+            agent.updateForTimerTick(uwpe);
         }
-        this.cursor.updateForTimerTick(universe, world, this);
+        this.cursor.updateForTimerTick(uwpe);
     }
     // drawable
     draw(universe, world, display) {

@@ -2,7 +2,7 @@
 class FacilityDefn
 {
 	name: string;
-	visual: Visual;
+	visual: VisualBase;
 	resourcesToBuild: Resource[];
 	initialize: any;
 	agentDirect: any;
@@ -11,7 +11,7 @@ class FacilityDefn
 	constructor
 	(
 		name: string,
-		visual: Visual,
+		visual: VisualBase,
 		resourcesToBuild: Resource[],
 		initialize: any,
 		agentDirect: any,

@@ -25,21 +25,21 @@ class Pane {
         var drawPos = this.drawPos;
         drawPos.overwriteWith(this.pos).add(pos);
         var display = Globals.Instance().display;
-        display.drawRectangle(drawPos, size, colorFill, colorBorder, null // ?
+        display.drawRectangle(drawPos, size, colorFill, colorBorder // ?
         );
     }
     drawText(textToDraw, fontHeightInPixels, pos, color) {
         var drawPos = this.drawPos;
         drawPos.overwriteWith(this.pos).add(pos);
         var display = Globals.Instance().display;
-        display.drawText(textToDraw, fontHeightInPixels, drawPos, color, null, null, null, null // ?
+        display.drawText(textToDraw, fontHeightInPixels, drawPos, color, null, null, null // ?
         );
     }
     displayToUse() { return this; }
     drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) { }
     drawBackground(colorBack, colorBorder) { }
     drawCircleWithGradient(center, radius, gradientFill, colorBorder) { }
-    drawCrosshairs(center, radius, color) { }
+    drawCrosshairs(center, numberOfLines, radiusOuter, radiusInner, color, lineThickness) { }
     drawEllipse(center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder) { }
     drawImage(imageToDraw, pos) { }
     drawImagePartial(imageToDraw, pos, regionToDrawAsBox) { }
@@ -49,6 +49,7 @@ class Pane {
     drawMeshWithOrientation(mesh, meshOrientation) { }
     drawPixel(pos, color) { }
     drawPolygon(vertices, colorFill, colorBorder) { }
+    drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) { }
     drawRectangleCentered(pos, size, colorFill, colorBorder) { }
     drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) { }
     eraseModeSet(value) { }

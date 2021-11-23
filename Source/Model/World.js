@@ -26,7 +26,8 @@ class World2 extends World {
     initialize2(universe) {
         this.level.initialize2(universe, this);
     }
-    updateForTimerTick(universe) {
+    updateForTimerTick(uwpe) {
+        var universe = uwpe.universe;
         this.level.updateForTimerTick2(universe, this);
         this.timerTicksSoFar++;
     }

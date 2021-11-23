@@ -8,7 +8,7 @@ class Cursor extends Entity2
 	pos: Coords;
 	_locatable: Locatable;
 	sizeInPixels: Coords;
-	visual: Visual;
+	visual: VisualBase;
 
 	constructor(posInCells: Coords)
 	{
@@ -40,7 +40,11 @@ class Cursor extends Entity2
 				if (canBuild)
 				{
 					facility.posInCells = this.posInCells.clone();
-					facility.initialize(universe, world, level);
+					var uwpe = new UniverseWorldPlaceEntities
+					(
+						universe, world, level, facility, null
+					);
+					facility.initialize(uwpe);
 					level.facilities.push(facility);
 
 					this.entityToPlace = null;
@@ -124,8 +128,9 @@ class Cursor extends Entity2
 
 	// entity
 
-	initialize(universe: Universe, world: World, place: Place): Entity
+	initialize(uwpe: UniverseWorldPlaceEntities): Entity
 	{
+		var place = uwpe.place;
 		var level = place as Level;
 
 		var mapCellSizeInPixels = level.map.cellSizeInPixels;
@@ -154,11 +159,10 @@ class Cursor extends Entity2
 		return this;
 	}
 
-	updateForTimerTick
-	(
-		universe: Universe, world: World, place: Place
-	): Entity
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): Entity
 	{
+		var place = uwpe.place;
+
 		var level = place as Level;
 
 		var mapCellSizeInPixels = level.map.cellSizeInPixels;
@@ -185,7 +189,12 @@ class Cursor extends Entity2
 		universe: Universe, world: World2, display: Display, level: Level
 	): void
 	{
-		this.visual.draw(universe, world, null, this, display);
+		var uwpe = new UniverseWorldPlaceEntities
+		(
+			universe, world, null, this, null
+		);
+
+		this.visual.draw(uwpe, display);
 
 		var textColor = Color.byName("Gray");
 		var timeAsString = level.timeOfDay(world);
@@ -194,7 +203,7 @@ class Cursor extends Entity2
 			"Time: " + timeAsString, textColor
 		);
 		var visual = new VisualAnchor(visualText, Coords.fromXY(0, 0), null);
-		visual.draw(universe, world, null, this, level.paneStatus);
+		visual.draw(uwpe, level.paneStatus);
 
 		var selectionAsText = "[none]";
 
@@ -219,6 +228,10 @@ class Cursor extends Entity2
 
 		var selectedText = "Selected:\n" + selectionAsText;
 		visualText._text.contextSet(selectedText);
-		visual.draw(universe, world, null, this, level.paneSelection);
+		var uwpe = new UniverseWorldPlaceEntities
+		(
+			universe, world, null, this, null
+		);
+		visual.draw(uwpe, level.paneSelection);
 	}
 }

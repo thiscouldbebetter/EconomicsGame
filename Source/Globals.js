@@ -20,6 +20,7 @@ class Globals {
     }
     // events
     handleEventTimerTick() {
-        this.world.updateForTimerTick(null);
+        var uwpe = new UniverseWorldPlaceEntities(null, this.world, null, null, null);
+        this.world.updateForTimerTick(uwpe);
     }
 }

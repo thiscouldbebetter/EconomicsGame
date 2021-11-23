@@ -1,5 +1,5 @@
 "use strict";
-class MapCell extends Entity2 {
+class MapCell2 extends Entity2 {
     constructor(terrainCode, emplacementCode, posInCells) {
         super();
         this.terrainCode = terrainCode;
@@ -31,11 +31,12 @@ class MapCell extends Entity2 {
         drawPos.overwriteWith(this.posInCells).add(Coords.Instances().Halves).multiply(map.cellSizeInPixels);
         var terrain = this.terrain(map);
         var visual = terrain.visual;
-        visual.draw(universe, world, null, this, display);
+        var uwpe = new UniverseWorldPlaceEntities(universe, world, null, this, null);
+        visual.draw(uwpe, display);
         var emplacement = this.emplacement(map);
         if (emplacement != null) {
             visual = emplacement.visual;
-            visual.draw(universe, world, null, this, display);
+            visual.draw(uwpe, display);
         }
     }
 }

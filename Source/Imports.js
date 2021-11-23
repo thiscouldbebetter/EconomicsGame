@@ -20,6 +20,7 @@ var Path = gf.Path;
 var Place = gf.Place;
 var StringHelper = gf.StringHelper;
 var Universe = gf.Universe;
+var UniverseWorldPlaceEntities = gf.UniverseWorldPlaceEntities;
 var ValueBreakGroup = gf.ValueBreakGroup;
 var VisualAnchor = gf.VisualAnchor;
 var VisualBuilder = gf.VisualBuilder;

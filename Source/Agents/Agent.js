@@ -51,7 +51,8 @@ class Agent extends Entity2 {
     defn(world) {
         return world.agentDefnsByName.get(this.defnName);
     }
-    initialize(universe, world, place) {
+    initialize(uwpe) {
+        var place = uwpe.place;
         var level = place;
         this.pos.overwriteWith(this.posInCells).add(Coords.Instances().Halves).multiply(level.map.cellSizeInPixels);
         return this;
@@ -59,7 +60,9 @@ class Agent extends Entity2 {
     locatable() {
         return this._locatable;
     }
-    updateForTimerTick(universe, worldAsWorld, place) {
+    updateForTimerTick(uwpe) {
+        var worldAsWorld = uwpe.world;
+        var place = uwpe.place;
         var world = worldAsWorld;
         var level = place;
         if (this.facilityHome == null) {
@@ -112,7 +115,8 @@ class Agent extends Entity2 {
     // drawable
     draw(universe, world, display, level) {
         var visual = this.defn(world).visual;
-        visual.draw(universe, world, null, this, display);
+        var uwpe = new UniverseWorldPlaceEntities(universe, world, null, this, null);
+        visual.draw(uwpe, display);
     }
     // strings
     toString() {

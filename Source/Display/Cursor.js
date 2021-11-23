@@ -18,7 +18,8 @@ class Cursor extends Entity2 {
                 var canBuild = owner.resourceHolder.hasResources(facilityDefn.resourcesToBuild);
                 if (canBuild) {
                     facility.posInCells = this.posInCells.clone();
-                    facility.initialize(universe, world, level);
+                    var uwpe = new UniverseWorldPlaceEntities(universe, world, level, facility, null);
+                    facility.initialize(uwpe);
                     level.facilities.push(facility);
                     this.entityToPlace = null;
                 }
@@ -65,7 +66,8 @@ class Cursor extends Entity2 {
         level.map.boundsInCellsMinusOnes.trimCoords(this.posInCells);
     }
     // entity
-    initialize(universe, world, place) {
+    initialize(uwpe) {
+        var place = uwpe.place;
         var level = place;
         var mapCellSizeInPixels = level.map.cellSizeInPixels;
         this.pos.overwriteWith(this.posInCells).add(Coords.Instances().Halves).multiply(mapCellSizeInPixels);
@@ -76,7 +78,8 @@ class Cursor extends Entity2 {
         );
         return this;
     }
-    updateForTimerTick(universe, world, place) {
+    updateForTimerTick(uwpe) {
+        var place = uwpe.place;
         var level = place;
         var mapCellSizeInPixels = level.map.cellSizeInPixels;
         var halves = Coords.Instances().Halves;
@@ -85,12 +88,13 @@ class Cursor extends Entity2 {
     }
     // drawable
     draw(universe, world, display, level) {
-        this.visual.draw(universe, world, null, this, display);
+        var uwpe = new UniverseWorldPlaceEntities(universe, world, null, this, null);
+        this.visual.draw(uwpe, display);
         var textColor = Color.byName("Gray");
         var timeAsString = level.timeOfDay(world);
         var visualText = VisualText.fromTextAndColor("Time: " + timeAsString, textColor);
         var visual = new VisualAnchor(visualText, Coords.fromXY(0, 0), null);
-        visual.draw(universe, world, null, this, level.paneStatus);
+        visual.draw(uwpe, level.paneStatus);
         var selectionAsText = "[none]";
         if (this.entitySelected != null) {
             selectionAsText = this.entitySelected.toString();
@@ -102,6 +106,7 @@ class Cursor extends Entity2 {
         }
         var selectedText = "Selected:\n" + selectionAsText;
         visualText._text.contextSet(selectedText);
-        visual.draw(universe, world, null, this, level.paneSelection);
+        var uwpe = new UniverseWorldPlaceEntities(universe, world, null, this, null);
+        visual.draw(uwpe, level.paneSelection);
     }
 }

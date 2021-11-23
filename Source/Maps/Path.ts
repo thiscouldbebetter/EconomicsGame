@@ -1,13 +1,13 @@
 
 class PathAgent
 {
-	map: MapOfCells;
+	map: MapOfCells2;
 	startPos: Coords;
 	goalPos: Coords;
 
 	nodes: PathNode[];
 
-	constructor(map: MapOfCells, startPos: Coords, goalPos: Coords)
+	constructor(map: MapOfCells2, startPos: Coords, goalPos: Coords)
 	{
 		this.map = map;
 		this.startPos = startPos;
