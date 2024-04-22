@@ -107,6 +107,7 @@ class DemoData {
         return world;
     }
     world_FacilityDefns(facilitySize) {
+        var fontNameAndHeight = null;
         var houseColor = Color.byName("GrayDark");
         var house = new FacilityDefn("House", new VisualGroup([
             new VisualPath(new Path([
@@ -117,7 +118,7 @@ class DemoData {
                 Coords.fromXY(-.5, 0).multiply(facilitySize)
             ]), houseColor, 1, // lineThickness
             true),
-            VisualText.fromTextAndColor("House", houseColor)
+            VisualText.fromTextImmediateFontAndColor("House", fontNameAndHeight, houseColor)
         ]), 
         // resourcesToBuild
         [], 
@@ -149,7 +150,7 @@ class DemoData {
             ]), farmColor, 1, // lineThickness
             true // isClosed
             ),
-            VisualText.fromTextAndColor("Farm", farmColor)
+            VisualText.fromTextImmediateFontAndColor("Farm", fontNameAndHeight, farmColor)
         ]), 
         // resourcesToBuild
         [], null, // initialize
@@ -166,7 +167,7 @@ class DemoData {
             new VisualRectangle(facilitySize, null, marketplaceColor, // colors
             null // ?
             ),
-            VisualText.fromTextAndColor("Marketplace", marketplaceColor)
+            VisualText.fromTextImmediateFontAndColor("Marketplace", fontNameAndHeight, marketplaceColor)
         ]), 
         // resourcesToBuild
         [], null, // initialize

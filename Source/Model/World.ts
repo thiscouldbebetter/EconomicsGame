@@ -35,7 +35,8 @@ class World2 extends World
 			name,
 			null, // timeCreated
 			null, // worldDefn
-			[] // places
+			(name) => level, // placeGetByName
+			null // placeInitialName
 		);
 
 		this.dayNightCyclePeriodInSeconds = dayNightCyclePeriodInSeconds;

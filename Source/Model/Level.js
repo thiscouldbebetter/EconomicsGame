@@ -1,7 +1,8 @@
 "use strict";
-class Level extends Place {
+class Level extends PlaceBase {
     constructor(name, map, owner, facilities, agents) {
         super(name, null, // defnName
+        null, // parentName
         map.sizeInPixels, // size
         [] // entities
         );
@@ -35,7 +36,7 @@ class Level extends Place {
         }
     }
     entitiesAtPos(world, posToCheck, listToAddTo) {
-        var posToCheckInCells = posToCheck.clone().divide(this.map.cellSizeInPixels).floor();
+        var posToCheckInCells = posToCheck.clone().divide(this.map.cellSizeInPixels).floor().clearZ();
         var entitySets = [
             this.facilities, this.agents
         ];

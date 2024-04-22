@@ -1,5 +1,5 @@
 
-class Level extends Place
+class Level extends PlaceBase
 {
 	name: string;
 	map: MapOfCells2;
@@ -30,6 +30,7 @@ class Level extends Place
 		(
 			name,
 			null, // defnName
+			null, // parentName
 			map.sizeInPixels, // size
 			[] // entities
 		);
@@ -79,7 +80,7 @@ class Level extends Place
 		var posToCheckInCells = posToCheck.clone().divide
 		(
 			this.map.cellSizeInPixels
-		).floor();
+		).floor().clearZ();
 
 		var entitySets =
 		[

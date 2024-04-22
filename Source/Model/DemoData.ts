@@ -221,6 +221,7 @@ class DemoData
 
 	world_FacilityDefns(facilitySize: Coords): FacilityDefn[]
 	{
+		var fontNameAndHeight: FontNameAndHeight = null;
 		var houseColor = Color.byName("GrayDark");
 		var house = new FacilityDefn
 		(
@@ -241,9 +242,9 @@ class DemoData
 					1, // lineThickness
 					true, // isClosed
 				),
-				VisualText.fromTextAndColor
+				VisualText.fromTextImmediateFontAndColor
 				(
-					"House", houseColor
+					"House", fontNameAndHeight, houseColor
 				)
 			]),
 			// resourcesToBuild
@@ -298,9 +299,9 @@ class DemoData
 					1, // lineThickness
 					true // isClosed
 				),
-				VisualText.fromTextAndColor
+				VisualText.fromTextImmediateFontAndColor
 				(
-					"Farm", farmColor
+					"Farm", fontNameAndHeight, farmColor
 				)
 			]),
 			// resourcesToBuild
@@ -337,9 +338,9 @@ class DemoData
 					null, marketplaceColor, // colors
 					null // ?
 				),
-				VisualText.fromTextAndColor
+				VisualText.fromTextImmediateFontAndColor
 				(
-					"Marketplace", marketplaceColor
+					"Marketplace", fontNameAndHeight, marketplaceColor
 				)
 			]),
 			// resourcesToBuild

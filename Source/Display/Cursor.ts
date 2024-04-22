@@ -198,9 +198,11 @@ class Cursor extends Entity2
 
 		var textColor = Color.byName("Gray");
 		var timeAsString = level.timeOfDay(world);
-		var visualText = VisualText.fromTextAndColor
+		var visualText = VisualText.fromTextImmediateFontAndColor
 		(
-			"Time: " + timeAsString, textColor
+			"Time: " + timeAsString,
+			null, // fontNameAndHeight
+			textColor
 		);
 		var visual = new VisualAnchor(visualText, Coords.fromXY(0, 0), null);
 		visual.draw(uwpe, level.paneStatus);

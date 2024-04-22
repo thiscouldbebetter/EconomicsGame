@@ -10,6 +10,9 @@ class Pane {
     clear() {
         this.drawRectangle(Coords.Instances().Zeroes, this.sizeInPixels, this.colorBack, this.colorFore);
     }
+    colorAtPos(pos, colorOut) {
+        throw new Error("todo");
+    }
     drawCircle(centerPos, radius, colorFill, colorBorder) {
         var drawPos = this.drawPos;
         drawPos.overwriteWith(this.pos).add(centerPos);
@@ -28,11 +31,11 @@ class Pane {
         display.drawRectangle(drawPos, size, colorFill, colorBorder // ?
         );
     }
-    drawText(textToDraw, fontHeightInPixels, pos, color) {
+    drawText(textToDraw, fontNameAndHeight, pos, color) {
         var drawPos = this.drawPos;
         drawPos.overwriteWith(this.pos).add(pos);
         var display = Globals.Instance().display;
-        display.drawText(textToDraw, fontHeightInPixels, drawPos, color, null, null, null // ?
+        display.drawText(textToDraw, fontNameAndHeight, drawPos, color, null, null, null, null // ?
         );
     }
     displayToUse() { return this; }
@@ -49,11 +52,12 @@ class Pane {
     drawMeshWithOrientation(mesh, meshOrientation) { }
     drawPixel(pos, color) { }
     drawPolygon(vertices, colorFill, colorBorder) { }
+    drawRectangleWithBeveledCorners(pos, size, colorFill, colorBorder, cornerRadius) { }
     drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) { }
     drawRectangleCentered(pos, size, colorFill, colorBorder) { }
     drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) { }
     eraseModeSet(value) { }
-    fontSet(fontName, fontHeightInPixels) { }
+    fontSet(fontNameAndHeight) { }
     flush() { }
     hide(universe) { }
     initialize(universe) { return this; }

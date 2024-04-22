@@ -3,7 +3,8 @@ class World2 extends World {
     constructor(name, dayNightCyclePeriodInSeconds, resourceDefns, mapEmplacementDefns, facilityDefns, agentDefns, actions, level) {
         super(name, null, // timeCreated
         null, // worldDefn
-        [] // places
+        (name) => level, // placeGetByName
+        null // placeInitialName
         );
         this.dayNightCyclePeriodInSeconds = dayNightCyclePeriodInSeconds;
         this.resourceDefns = resourceDefns;

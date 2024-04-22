@@ -6,6 +6,7 @@ class Pane implements Display
 
 	drawPos: Coords;
 	drawableDummy: DrawableDummy;
+	fontNameAndHeight: FontNameAndHeight;
 
 	constructor(pos: Coords, sizeInPixels: Coords)
 	{
@@ -25,6 +26,11 @@ class Pane implements Display
 			Coords.Instances().Zeroes, this.sizeInPixels,
 			this.colorBack, this.colorFore
 		);
+	}
+
+	colorAtPos(pos: Coords, colorOut: Color): Color
+	{
+		throw new Error("todo");
 	}
 
 	drawCircle
@@ -70,7 +76,9 @@ class Pane implements Display
 
 	drawText
 	(
-		textToDraw: string, fontHeightInPixels: number, pos: Coords,
+		textToDraw: string,
+		fontNameAndHeight: FontNameAndHeight,
+		pos: Coords,
 		color: Color
 	): void
 	{
@@ -79,8 +87,8 @@ class Pane implements Display
 		var display = Globals.Instance().display;
 		display.drawText
 		(
-			textToDraw, fontHeightInPixels, drawPos, color,
-			null, null, null // ?
+			textToDraw, fontNameAndHeight, drawPos, color,
+			null, null, null, null // ?
 		);
 	}
 
@@ -133,6 +141,12 @@ class Pane implements Display
 	drawMeshWithOrientation(mesh: MeshTextured, meshOrientation: Orientation): void {}
 	drawPixel(pos: Coords, color: Color): void {}
 	drawPolygon(vertices: Coords[], colorFill: Color, colorBorder: Color): void {}
+	drawRectangleWithBeveledCorners
+	(
+		pos: Coords, size: Coords,
+		colorFill: Color, colorBorder: Color,
+		cornerRadius: number
+	): void {}
 	drawRectangleWithRoundedCorners
 	(
 		pos: Coords, size: Coords,
@@ -149,7 +163,7 @@ class Pane implements Display
 		angleStopInTurns: number, colorFill: Color, colorBorder: Color
 	): void {}
 	eraseModeSet(value: boolean): void {}
-	fontSet(fontName: string, fontHeightInPixels: number): void {}
+	fontSet(fontNameAndHeight: FontNameAndHeight): void {}
 	flush(): void {}
 	hide(universe: Universe): void {}
 	initialize(universe: Universe): Display { return this; }
