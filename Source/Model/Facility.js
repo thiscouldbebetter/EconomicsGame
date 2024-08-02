@@ -41,7 +41,7 @@ class Facility extends Entity2 {
         this.defn(world).interactWith(world, level, agent, this);
     }
     // drawable
-    draw(universe, world, display, level) {
+    drawToDisplay(universe, world, display, level) {
         var defn = this.defn(world);
         var visual = defn.visual;
         var uwpe = new UniverseWorldPlaceEntities(universe, world, null, this, null);

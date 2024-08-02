@@ -243,7 +243,7 @@ class Agent extends Entity2 implements Actor2
 
 	// drawable
 
-	draw
+	drawToDisplay
 	(
 		universe: Universe, world: World2, display: Display,
 		level: Level

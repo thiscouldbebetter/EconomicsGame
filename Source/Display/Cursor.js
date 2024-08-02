@@ -87,7 +87,7 @@ class Cursor extends Entity2 {
         return this;
     }
     // drawable
-    draw(universe, world, display, level) {
+    drawToDisplay(universe, world, display, level) {
         var uwpe = new UniverseWorldPlaceEntities(universe, world, null, this, null);
         this.visual.draw(uwpe, display);
         var textColor = Color.byName("Gray");

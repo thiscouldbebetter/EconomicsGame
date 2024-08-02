@@ -132,12 +132,12 @@ class Level extends PlaceBase {
         this.map.draw(universe, world, this.paneMap, this);
         for (var i = 0; i < this.facilities.length; i++) {
             var facility = this.facilities[i];
-            facility.draw(universe, world, this.paneMap, this);
+            facility.drawToDisplay(universe, world, this.paneMap, this);
         }
         for (var i = 0; i < this.agents.length; i++) {
             var agent = this.agents[i];
-            agent.draw(universe, world, this.paneMap, this);
+            agent.drawToDisplay(universe, world, this.paneMap, this);
         }
-        this.cursor.draw(universe, world, this.paneMap, this);
+        this.cursor.drawToDisplay(universe, world, this.paneMap, this);
     }
 }

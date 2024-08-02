@@ -113,7 +113,7 @@ class Agent extends Entity2 {
         return returnValue;
     }
     // drawable
-    draw(universe, world, display, level) {
+    drawToDisplay(universe, world, display, level) {
         var visual = this.defn(world).visual;
         var uwpe = new UniverseWorldPlaceEntities(universe, world, null, this, null);
         visual.draw(uwpe, display);
